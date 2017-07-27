@@ -32,12 +32,18 @@ export default class AppControl extends Component {
   componentWillUnmount(){
     window.clearInterval(this.state.interval)
   }
+  componentDidMount(){
+    session.onUpdate(() => {
+      this.forceUpdate()
+    })
+  }
   render(){
+    const navigate = (path) => window.location.replace(`#${path}`)
     const location = this.state.hash
     const app = this.props.children
     return (
       <div>
-        {React.cloneElement(app, {location, session})}
+        {React.cloneElement(app, {location, session, navigate})}
       </div>
     )
   }

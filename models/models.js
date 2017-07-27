@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
+const Mixed = mongoose.Schema.Types.Mixed;
 
 mongoose.connect('mongodb://localhost/stories');
 
 const storySchema = mongoose.Schema({
     name: String,
-    author: ObjectId,
+    author: String,
     category: String,
-    text: String
+    content: Mixed
 });
 
 const userSchema = mongoose.Schema({

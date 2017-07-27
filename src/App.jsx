@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import storyText from './Adventure/example2'
 import Adventure from './Adventure/'
-import compiler from './Adventure/compiler'
 import Browse from './Stories/index.jsx'
 import Login from './Login/index.jsx'
 import Create from './Create/index.jsx'
@@ -27,14 +26,12 @@ const routes = {
 }
 
 class App extends Component {
-  constructor(){
-    super()
-    window.onhashchange = () => this.forceUpdate()
-  }
   render(){
     const Component = routes[this.props.location]
+    const { session, navigate } = this.props
+
     return (
-      <Component session={this.props.session}/>
+      <Component session={this.props.session} navigate={navigate}/>
     )
   }
 }
