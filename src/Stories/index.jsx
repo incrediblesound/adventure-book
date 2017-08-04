@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Header from '../Header/index.jsx';
-
 const StoryContainer = styled.div`
   font-size: 14px;
 `
@@ -15,7 +13,6 @@ export default class Browse extends Component {
     const { session, navigate } = this.props
     return (
       <div>
-        <Header session={session} navigate={navigate} />
         <StoryContainer>
           {
             session.get('stories', []).map((story, i) => {

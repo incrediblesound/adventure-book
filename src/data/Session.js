@@ -35,6 +35,9 @@ export default class Session {
     const payload = { title, content: story, name }
     return axios.post('/api/story', { story: payload })
   }
+  fetchStory(id){
+    return axios.get(`api/story/${id}`)
+  }
   fetchStories(category){
     let request
     if(category){

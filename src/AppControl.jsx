@@ -39,7 +39,7 @@ export default class AppControl extends Component {
   }
   render(){
     const navigate = (path) => window.location.replace(`#${path}`)
-    const location = this.state.hash
+    const location = this.state.hash || window.location.hash.split('#')[1]
     const app = this.props.children
     return (
       <div>

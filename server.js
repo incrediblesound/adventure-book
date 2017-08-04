@@ -13,8 +13,21 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/api/stories', (req, res) => {
+app.get('/api/stories/', (req, res) => {
   Story.find()
+    .select('name content author')
+    .sort('-date')
+    .then(result => {
+      res.send({ success: true, stories: result })
+    })
+    .catch(err => {
+      res.send({ success: false, reason: err })
+    })
+})
+
+app.get('/api/stories/:author', (req, res) => {
+  const { author } = req.params
+  Story.find({ author })
     .select('name content author')
     .then(result => {
       res.send({ success: true, stories: result })
@@ -25,7 +38,6 @@ app.get('/api/stories', (req, res) => {
 })
 
 app.post('/api/story', (req, res) => {
-  console.log(req.body)
   const { content, title, name } = req.body.story
   Story.findOne({ title, author: name }).then(result => {
     if(result !== null){
@@ -67,9 +79,13 @@ app.post('/api/signup', (req, res) => {
   })
 })
 
-app.get('*', (req, res) => {
-  console.log('Oooops!')
-  res.end()
+app.get('/api/story/:id', (req, res) => {
+  const { id } = req.params
+  Story.findById(id).then(result => {
+    res.send({ success: true, story: result })
+  }).catch(err => {
+    res.send({ success: false, reason: err })
+  })
 })
 
 app.listen(8080);
