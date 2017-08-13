@@ -8,12 +8,12 @@ const storySchema = mongoose.Schema({
     name: String,
     author: String,
     category: String,
-    content: Mixed
+    content: String,
 });
 
 const userSchema = mongoose.Schema({
   name: String,
-  password: String
+  password: String,
 })
 
 const Story = mongoose.model('Story', storySchema);

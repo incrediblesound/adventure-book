@@ -24,7 +24,7 @@ class App extends Component {
 
     return (
       <div>
-        <Header session={session} navigate={navigate} />
+        { path !== 'login' && <Header session={session} navigate={navigate} /> }
         <div className="container">
           <Component session={session} navigate={navigate} location={location}/>
         </div>

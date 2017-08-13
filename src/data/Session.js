@@ -3,7 +3,8 @@ import axios from 'axios'
 export default class Session {
   constructor(){
     this.data = {
-      user: null
+      user: null,
+      sectionMeta: {}
     }
     this.listeners = []
   }
@@ -53,5 +54,17 @@ export default class Session {
   }
   get(key, defaultValue){
     return this.data[key] || defaultValue
+  }
+  getMetaForSection(section){
+    if(this.data.sectionMeta[section.id]){
+      return this.data.sectionMeta[section.id]
+    } else {
+      let meta = {
+        hasChallenge: !!section.challenge,
+        challengePassed: false
+      }
+      this.data.sectionMeta[section.id] = meta
+      return meta
+    }
   }
 }

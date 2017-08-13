@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import compiler from '../compiler/main'
+import compiler from 'story-parser'
 import styled from 'styled-components'
 
 const InputGroup = styled.div`
   margin: 5px;
   text-transform: uppercase;
+  display: block;
 `
 
 const Error = styled.p`
@@ -27,13 +28,14 @@ export default class Create extends Component {
     }
   }
   submit = () => {
-    const [story, text, error] = compiler(this.state.text)
+    const { text, title } = this.state
+    const [story, newText, error] = compiler(this.state.text)
     if (error) {
       this.setState({ error })
-    } else if (!this.state.title) {
+    } else if (!title) {
       this.setState({ error: 'You are required to provide a title for your story.' })
     } else {
-      this.props.session.saveStory(story, this.state.title)
+      this.props.session.saveStory(text, title)
         .then(response => {
           if(!response.success){
             this.setState({ error: response.reason })
@@ -54,7 +56,12 @@ export default class Create extends Component {
         </InputGroup>
         <InputGroup>
           <label>Text</label>
-          <textarea value={text} onChange={(e) => this.setState({ text: e.target.value })}/>
+          <textarea
+            rows={30}
+            cols={50}
+            value={text}
+            onChange={(e) => this.setState({ text: e.target.value })}
+          />
         </InputGroup>
         <Error>{error || ''}</Error>
         <button onClick={this.submit}>Submit</button>

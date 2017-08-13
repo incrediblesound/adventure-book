@@ -33,6 +33,7 @@ export default class Browse extends Component {
   render(){
     const { session } = this.props
     const user = session.get('user', { name: '' })
+    const isAuthenticated = this.props.session.isAuthenticated()
     return (
       <Header>
         <LeftSide>
@@ -40,7 +41,7 @@ export default class Browse extends Component {
         </LeftSide>
         <RightSide>
           <Name>{user.name}</Name>
-          <button onClick={() => this.handleLogout()}>LOG OUT</button>
+          <button onClick={() => this.handleLogout()}>{ isAuthenticated ? 'LOG OUT' : 'LOG IN' }</button>
         </RightSide>
       </Header>
     )

@@ -6,12 +6,9 @@ const session = new Session()
 export default class AppControl extends Component {
   constructor(){
     super()
-    let hash
-    try {
-      hash = window.location.hash.split('#')[1]
-    } catch(e){
-      hash = 'home'
-    }
+
+    let hash = window.location.hash.split('#')[1]
+
     this.state = {
       hash
     }
@@ -39,7 +36,11 @@ export default class AppControl extends Component {
   }
   render(){
     const navigate = (path) => window.location.replace(`#${path}`)
-    const location = this.state.hash || window.location.hash.split('#')[1]
+    const location = this.state.hash
+    if(!location){
+      navigate('home')
+      return <noscript />
+    }
     const app = this.props.children
     return (
       <div>
