@@ -55,6 +55,17 @@ app.post('/api/story', (req, res) => {
   }).catch(e => console.log(e))
 })
 
+app.put('/api/story', (req, res) => {
+  const { content, name, _id } = req.body
+  Story.findByIdAndUpdate(_id, { $set: { content, name }})
+    .then(result => {
+      res.send({ success: true })
+    })
+    .catch(err => {
+      res.send({ success: false, reason: err })
+    })
+})
+
 app.post('/api/login', (req, res) => {
   User.findOne(req.body).then(result => {
     const userExists = result !== null

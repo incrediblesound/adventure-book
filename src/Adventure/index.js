@@ -25,16 +25,15 @@ class App extends Component {
     super()
     const [ game ] = parser(content)
     const section = game.pages.filter(section => section.id === 0)[0]
-    const player = game.player
-    player.currentHealth = player.health
+    session.startStory(game)
 
     this.state = {
       game,
-      player,
       currentSectionId: 0,
       currentSection: section,
-      sectionMeta: session.getMetaForSection(section),
       selectedOption: null,
+      player: session.gameState.player,
+      sectionMeta: session.gameState.getMetaForSection(section),
     }
   }
   selectOption(target){
@@ -43,19 +42,23 @@ class App extends Component {
     })
   }
   handleGo = () => {
+    const { session } = this.props
     const { selectedOption, game } = this.state
     const section = game.pages.filter(section => section.id === selectedOption)[0]
     this.setState({
       currentSection: section,
-      sectionMeta: this.props.session.getMetaForSection(section),
+      sectionMeta: session.gameState.getMetaForSection(section),
       currentSectionId: this.state.selectedOption,
       selectedOption: null
     })
   }
   restart = () => {
+    const { session } = this.props
+    session.startStory(this.state.game)
+
     this.setState({
       selectedOption: 0,
-      player: this.state.game.player
+      player: session.gameState.player
     }, this.handleGo)
 
   }

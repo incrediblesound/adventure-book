@@ -1,13 +1,26 @@
 import axios from 'axios'
+import GameState from './GameState'
 
 export default class Session {
   constructor(){
+    this.gameState = null
     this.data = {
       user: null,
-      sectionMeta: {}
     }
     this.listeners = []
   }
+  get(key, defaultValue){
+    return this.data[key] || defaultValue
+  }
+  onUpdate(cb){
+    this.listeners.push(cb)
+  }
+  update(){
+    this.listeners.forEach(cb => {
+      cb()
+    })
+  }
+  /* AUTHENTICATION */
   isAuthenticated(){
     return !!this.data.user
   }
@@ -23,26 +36,25 @@ export default class Session {
   logOut(){
     this.data.user = null;
   }
-  onUpdate(cb){
-    this.listeners.push(cb)
+  getUsername(){
+    return this.data.user && this.data.user.name
   }
-  update(){
-    this.listeners.forEach(cb => {
-      cb()
-    })
-  }
+  /* STORIES */
   saveStory(story, title){
     const { name } = this.data.user
     const payload = { title, content: story, name }
     return axios.post('/api/story', { story: payload })
   }
+  updateStory(story){
+    return axios.put('api/story', story)
+  }
   fetchStory(id){
     return axios.get(`api/story/${id}`)
   }
-  fetchStories(category){
+  fetchStories(category, value){
     let request
     if(category){
-      request = axios.get('/api/stories', { category })
+      request = axios.get('/api/stories', { [category]: value })
     } else {
       request = axios.get('/api/stories')
     }
@@ -52,19 +64,8 @@ export default class Session {
       this.update()
     })
   }
-  get(key, defaultValue){
-    return this.data[key] || defaultValue
-  }
-  getMetaForSection(section){
-    if(this.data.sectionMeta[section.id]){
-      return this.data.sectionMeta[section.id]
-    } else {
-      let meta = {
-        hasChallenge: !!section.challenge,
-        challengePassed: false
-      }
-      this.data.sectionMeta[section.id] = meta
-      return meta
-    }
+  /* GAME STATE */
+  startStory(story){
+    this.gameState = new GameState(story)
   }
 }

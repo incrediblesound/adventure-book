@@ -25,6 +25,12 @@ const Name = styled.span`
   margin: 0px 10px;
 `
 
+const HeaderLink = styled.span`
+  color: blue;
+  margin: 2px 15px;
+  cursor: pointer;
+`
+
 export default class Browse extends Component {
   handleLogout(){
     this.props.session.logOut()
@@ -37,11 +43,12 @@ export default class Browse extends Component {
     return (
       <Header>
         <LeftSide>
-          <button onClick={() => this.props.navigate('home')}>HOME</button>
+          <HeaderLink onClick={() => this.props.navigate('home')}>BROWSE</HeaderLink>
+          <HeaderLink onClick={() => this.props.navigate('profile')}>MY STORIES</HeaderLink>
         </LeftSide>
         <RightSide>
           <Name>{user.name}</Name>
-          <button onClick={() => this.handleLogout()}>{ isAuthenticated ? 'LOG OUT' : 'LOG IN' }</button>
+          <HeaderLink onClick={() => this.handleLogout()}>{ isAuthenticated ? 'LOG OUT' : 'LOG IN' }</HeaderLink>
         </RightSide>
       </Header>
     )

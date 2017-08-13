@@ -18,7 +18,8 @@ export default class Create extends Component {
     this.state = {
       title: '',
       text: '',
-      error: false
+      error: false,
+      id: null
     }
   }
   componentWillMount(){
@@ -27,21 +28,37 @@ export default class Create extends Component {
       this.props.navigate('login')
     }
   }
+  componentDidMount(){
+    const id = this.props.location.split('/')[1]
+    this.props.session.fetchStory(id).then(response => {
+      const { data } = response
+      if(data.success){
+        const { author, name, content, _id } = data.story
+        this.setState({
+          title: name,
+          text: content,
+          id: _id,
+        })
+      } else {
+        this.setState({ error: data.error })
+      }
+    })
+  }
   submit = () => {
-    const { text, title } = this.state
+    const { text, title, id } = this.state
     const [story, newText, error] = compiler(this.state.text)
     if (error) {
       this.setState({ error })
     } else if (!title) {
       this.setState({ error: 'You are required to provide a title for your story.' })
     } else {
-      this.props.session.saveStory(text, title)
+      this.props.session.updateStory({ _id: id, content: text, name: title })
         .then(response => {
           const { data } = response
           if(!data.success){
             this.setState({ error: data.reason })
           } else {
-            this.props.navigate('home')
+            this.props.navigate('profile')
           }
         })
     }

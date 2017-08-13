@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import Header from './Header/index.jsx';
 
 
-import Adventure from './Adventure/'
 import Browse from './Stories/index.jsx'
 import Login from './Login/index.jsx'
 import Create from './Create/index.jsx'
 import Story from './Story/index.jsx'
+import Profile from './Profile/index.jsx'
+import EditStory from './Edit/index.jsx'
 
 const routes = {
   'home': Browse,
   'login': Login,
   'create': Create,
   'view': Story,
+  'profile': Profile,
+  'edit': EditStory,
 }
 
 class App extends Component {
