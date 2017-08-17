@@ -17,7 +17,7 @@ export default class Browse extends Component {
           <a href={`#view/${story._id}`} key={`${story.name}-${i}`}>
             {story.name || 'error'}
           </a>
-          <span> by {story.author}</span>
+          <span> - by {story.author}</span>
         </div>
       )
     })

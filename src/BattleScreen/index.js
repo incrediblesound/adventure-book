@@ -9,14 +9,16 @@ const Wrapper = styled.div`
 `;
 
 const Countdown = styled.div`
-  position: absolute;
-  top: 50px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  height: 300px;
+  padding: 100px 140px;
   text-align: center;
   baseline: center;
 `;
+
+const BattlePanel = styled.div`
+   width: 200px;
+   margin: 5px 15px;
+`
 
 const Health = ({ value }) => {
   let color
@@ -31,7 +33,7 @@ const Health = ({ value }) => {
 }
 
 const Player = ({ player, coolDown, playerStrike }) => (
-  <div style={{ width: '200px' }}>
+  <BattlePanel>
     <div>Life: <Health value={Math.floor((player.currentHealth/player.health)*100)} /></div>
     <p>{`Weapon: ${player.weapon}`}</p>
     <p>{`Armor: ${player.armor}`}</p>
@@ -39,15 +41,15 @@ const Player = ({ player, coolDown, playerStrike }) => (
     { coolDown == 100 &&
       <button style={{ margin: '20px 0px', width: '100%'}} onClick={() => playerStrike()}>ATTACK</button>
     }
-  </div>
+  </BattlePanel>
 )
 
 const Challenge = ({ challenge, coolDown }) => (
-  <div style={{ width: '200px' }}>
+  <BattlePanel>
     <div>Life: <Health value={Math.floor((challenge.currentHealth/challenge.health)*100)} /></div>
     <p>{`Weapon: ${challenge.weapon}`}</p>
     <div style={{ width: coolDown + '%', height: '3px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
-  </div>
+  </BattlePanel>
 )
 
 export default class BattleScreen extends Component {
@@ -85,7 +87,8 @@ export default class BattleScreen extends Component {
   }
   playerStrike = () => {
     const { challenge, player } = this.state
-    challenge.currentHealth -= player.attack
+    const weapon = player.weapons[player.currentWeapon]
+    challenge.currentHealth -= weapon.attack
     this.setState({
       playerCoolDown: 0
     })
@@ -99,6 +102,7 @@ export default class BattleScreen extends Component {
   startAnimation = () => {
     this.checkGameConditions()
     const { playerCoolDown, challengeCoolDown, player, challenge, finished } = this.state
+
     let nextChallengeCoolDown
     if(challengeCoolDown === 100){
       nextChallengeCoolDown = 0
@@ -106,9 +110,11 @@ export default class BattleScreen extends Component {
     } else {
       nextChallengeCoolDown = challengeCoolDown < 100 ? Math.min(100, challengeCoolDown + challenge.speed) : challengeCoolDown
     }
+
     if(!finished){
+      const weapon = player.weapons[player.currentWeapon]
       this.setState({
-        playerCoolDown: playerCoolDown < 100 ? Math.min(100, playerCoolDown + player.speed) : playerCoolDown,
+        playerCoolDown: playerCoolDown < 100 ? Math.min(100, playerCoolDown + weapon.speed) : playerCoolDown,
         challengeCoolDown: nextChallengeCoolDown
       })
       requestAnimationFrame(this.startAnimation)
@@ -120,7 +126,13 @@ export default class BattleScreen extends Component {
   render(){
     const { player, challenge, playerCoolDown, challengeCoolDown, countdown } = this.state
     if(countdown){
-      return <Countdown><h1>{countdown}</h1></Countdown>
+      return (
+        <Wrapper>
+          <Countdown>
+            <h1>{countdown}</h1>
+          </Countdown>
+        </Wrapper>
+      )
     }
     return (
       <Wrapper>

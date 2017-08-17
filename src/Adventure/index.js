@@ -2,23 +2,14 @@ import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/index.js'
+import { Weapon, Armor } from './items.jsx'
+import { Panel } from '../components/index.jsx'
+import Player from './Player.jsx'
 
 const StoryText = styled.p`
   font-size: 18px;
   font-weight: 300;
-`
-
-const Adventure = styled.div`
-  position: relative;
-  width: 640px;
-  height: 480px;
-  box-shadow: 0px 1px 4px 1px #ddd;
-  overflow-x: scroll;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  padding: 10px;
-`
-
+`;
 
 class App extends Component {
   constructor({ content, session }){
@@ -45,10 +36,11 @@ class App extends Component {
     const { session } = this.props
     const { selectedOption, game } = this.state
     const section = game.pages.filter(section => section.id === selectedOption)[0]
+    session.gameState.updateSection(selectedOption)
     this.setState({
       currentSection: section,
       sectionMeta: session.gameState.getMetaForSection(section),
-      currentSectionId: this.state.selectedOption,
+      currentSectionId: selectedOption,
       selectedOption: null
     })
   }
@@ -79,6 +71,26 @@ class App extends Component {
         />
       </div>
     )
+  }
+  takeReward = (idx) => {
+    this.props.session.gameState.takeReward(idx)
+    this.props.session.update()
+  }
+  renderRewards(){
+    const { sectionMeta } = this.state
+    const keys = Object.keys(sectionMeta.rewards)
+    return keys.map(key => {
+      const reward = sectionMeta.rewards[key]
+      if (reward.obtained) return <noscript />
+      switch (reward.type) {
+        case 'weapon':
+          return <Weapon reward={reward} handleTake={() => this.takeReward(key)} />
+        case 'armor':
+          return <Armor reward={reward} handleTake={() => this.takeReward(key)} />
+        default:
+          return <noscript />
+      }
+    })
   }
   renderOptions(options) {
     if(options === 'END'){
@@ -111,17 +123,21 @@ class App extends Component {
         <p style={{ textAlign: 'center' }}>~</p>
         { this.renderOptions(options) }
         { options !== 'END' && <div><button onClick={() => this.handleGo()}>GO</button></div> }
+        { this.renderRewards() }
       </div>
     )
   }
   render() {
-    const { game, currentSection, sectionMeta } = this.state
+    const { game, currentSection, sectionMeta, player } = this.state
     const { text, options } = currentSection
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
     return (
-      <Adventure>
+      <div>
+      <Panel>
         { hasBattle ? this.renderBattle() : this.renderChoice()}
-      </Adventure>
+      </Panel>
+      <Player player={player} gameState={this.props.session.gameState}/>
+      </div>
     );
   }
 }

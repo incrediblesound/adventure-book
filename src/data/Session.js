@@ -66,6 +66,6 @@ export default class Session {
   }
   /* GAME STATE */
   startStory(story){
-    this.gameState = new GameState(story)
+    this.gameState = new GameState(story, this)
   }
 }
