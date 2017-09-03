@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import compiler from 'story-parser'
 import styled from 'styled-components'
+import { Title, Story } from '../components/index.jsx'
 
 const InputGroup = styled.div`
   margin: 5px;
@@ -69,15 +70,18 @@ export default class Create extends Component {
     return (
       <div>
         <InputGroup>
-          <label>Title</label>
-          <input value={title} onChange={(e) => this.setState({ title: e.target.value })}/>
+          <Title
+            value={title}
+            placeholder="TITLE"
+            onChange={(e) => this.setState({ title: e.target.value })}
+          />
         </InputGroup>
         <InputGroup>
-          <label>Text</label>
-          <textarea
+          <Story
             rows={30}
             cols={50}
             value={text}
+            placeholder="STORY"
             onChange={(e) => this.setState({ text: e.target.value })}
           />
         </InputGroup>

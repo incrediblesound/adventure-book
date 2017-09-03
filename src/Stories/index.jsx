@@ -14,8 +14,8 @@ export default class Browse extends Component {
     return session.get('stories', []).map((story, i) => {
       return (
         <div>
-          <a href={`#view/${story._id}`} key={`${story.name}-${i}`}>
-            {story.name || 'error'}
+          <a href={`#view/${story._id}`} key={`${story.title}-${i}`}>
+            {story.title || 'error'}
           </a>
           <span> - by {story.author}</span>
         </div>

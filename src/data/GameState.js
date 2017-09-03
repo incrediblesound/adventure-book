@@ -1,7 +1,9 @@
+import { deepCopy } from '../utilities'
+
 class GameState {
   constructor(story, session){
-    this.id = `${story.author}/${story.name}`
-    this.player = Object.assign({}, story.player)
+    this.id = `${story.author}/${story.title}`
+    this.player = deepCopy(story.player)
     this.player.currentHealth = story.player.health
     this.player.currentWeapon = 0
     this.sectionMeta = {}
@@ -17,8 +19,14 @@ class GameState {
   }
   takeReward(key){
     const section = this.sectionMeta[this.currentSection]
-    section.rewards[key].obtained = true
-    this.player.weapons.push(section.rewards[key])
+    const reward = section.rewards[key]
+    reward.obtained = true
+    if(reward.type === 'weapon'){
+      this.player.weapons.push(section.rewards[key])
+    } else if(reward.type === 'armor'){
+      this.player.defense = reward.defense
+      this.player.armor = reward.name
+    }
     this.session.update()
   }
   equip(idx){

@@ -3,11 +3,17 @@ import styled from 'styled-components'
 
 const TakeReward = styled.button`
   width: auto;
-  background-color: #00BFFF;
+  background-color: #7FDBFF;
   margin: 0px 5px;
-  border: none;
+  border: 1px solid #666;
   border-radius: 5px;
+  &:hover {
+    background-color: #0074D9;
+    color: white;
+  }
   cursor: pointer;
+  padding: 5px;
+
 `
 
 const ItemName = styled.p`

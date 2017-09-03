@@ -8,7 +8,7 @@ const Frame = styled.div`
   height: auto;
   border: solid 1px #999;
   border-radius: 10px;
-  padding: 5px;
+  padding: 5px 15px;
   margin: 5px;
 `
 

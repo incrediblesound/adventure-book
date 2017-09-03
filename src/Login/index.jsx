@@ -3,6 +3,9 @@ import styled from 'styled-components'
 
 const InputGroup = styled.div`
   margin: 5px 0px;
+  label {
+    display: block;
+  }
   text-transform: uppercase;
 `
 
@@ -31,11 +34,12 @@ export default class Login extends Component {
       error: null,
       isLogin: false,
       name: '',
-      password: ''
+      password: '',
+      email: '',
     }
   }
   auth = () => {
-    const { name, password, isLogin } = this.state
+    const { name, password, email, isLogin } = this.state
     if(isLogin){
       this.props.session.logIn({ name, password })
         .then(({ data }) => {
@@ -48,7 +52,7 @@ export default class Login extends Component {
           }
         })
     } else {
-      this.props.session.createUser({ name, password })
+      this.props.session.createUser({ name, password, email })
         .then(({ data }) => {
           const { success, user, reason } = data
           if(success){
@@ -76,12 +80,20 @@ export default class Login extends Component {
         </h2>
         <div>
           <InputGroup>
-          <label>User name </label>
-          <input value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })}/>
+            <label>User name { isLogin ? ' or Email' : ''} </label>
+            <input value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })}/>
           </InputGroup>
+          {
+            !isLogin && (
+              <InputGroup>
+                <label>Email </label>
+                <input value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })}/>
+              </InputGroup>
+            )
+          }
           <InputGroup>
-          <label>Password </label>
-          <input value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })}/>
+            <label>Password</label>
+            <input value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })}/>
           </InputGroup>
           <button onClick={this.auth}>GO</button>
         </div>

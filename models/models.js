@@ -1,23 +1,31 @@
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Schema.Types.ObjectId;
-const Mixed = mongoose.Schema.Types.Mixed;
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Schema.Types.ObjectId
+const Mixed = mongoose.Schema.Types.Mixed
 
-mongoose.connect('mongodb://localhost/stories');
+const { categories } = require('../src/Create/index.jsx')
+
+
+mongoose.connect('mongodb://localhost/stories')
 
 const storySchema = mongoose.Schema({
-    name: String,
+    title: { type: String, reqired: true },
     author: String,
-    category: String,
-    content: String,
-});
+    category: {
+      type: String,
+      enum: categories,
+      required: false
+    },
+    content: { type: String, required: true },
+}, { timestamps: true })
 
 const userSchema = mongoose.Schema({
   name: String,
+  email: String,
   password: String,
-})
+}, { timestamps: true })
 
-const Story = mongoose.model('Story', storySchema);
-const User = mongoose.model('User', userSchema);
+const Story = mongoose.model('Story', storySchema)
+const User = mongoose.model('User', userSchema)
 
 module.exports = {
   Story,

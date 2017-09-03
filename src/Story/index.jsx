@@ -17,14 +17,18 @@ class Story extends Component {
   }
   componentDidMount(){
     const id = this.props.location.split('/')[1]
-    this.props.session.fetchStory(id).then(response => {
-      const { data } = response
-      if(data.success){
-        this.setState({ gameData: data.story })
-      } else {
-        this.setState({ error: data.error })
-      }
-    })
+    this.props.session.fetchStory(id)
+      .then(response => {
+        const { data } = response
+        if(data.success){
+          this.setState({ gameData: data.story })
+        } else {
+          this.setState({ error: data.error })
+        }
+      })
+      .catch(response => {
+        this.setState({ error: JSON.stringify(response) })
+      })
   }
   renderStory(){
     const { session, navigate } = this.props

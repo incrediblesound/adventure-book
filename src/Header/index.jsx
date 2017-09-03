@@ -2,10 +2,12 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 const Header = styled.div`
+  font-family: 'Lato', sans-serif;
+  background-color: white;
   height: 35px;
   width: 100%;
   border-bottom: solid 1px #999;
-  padding: 5px 5px 0px 5px;
+  padding: 10px 5px 0px 5px;
   display: flex;
   justify-content: space-between;
 `
@@ -26,9 +28,9 @@ const Name = styled.span`
 `
 
 const HeaderLink = styled.span`
-  color: blue;
+  color: ${props => props.disabled ? '#666' : 'blue'};
   margin: 2px 15px;
-  cursor: pointer;
+  cursor: ${props => props.disabled ? 'inherit' : 'pointer'};
 `
 
 export default class Browse extends Component {
@@ -37,14 +39,14 @@ export default class Browse extends Component {
     this.props.navigate('login')
   }
   render(){
-    const { session } = this.props
+    const { session, page } = this.props
     const user = session.get('user', { name: '' })
     const isAuthenticated = this.props.session.isAuthenticated()
     return (
       <Header>
         <LeftSide>
-          <HeaderLink onClick={() => this.props.navigate('home')}>BROWSE</HeaderLink>
-          <HeaderLink onClick={() => this.props.navigate('profile')}>MY STORIES</HeaderLink>
+          <HeaderLink disabled={page === 'home'} onClick={() => this.props.navigate('home')}>BROWSE</HeaderLink>
+          <HeaderLink disabled={page === 'profile'} onClick={() => this.props.navigate('profile')}>MY STORIES</HeaderLink>
         </LeftSide>
         <RightSide>
           <Name>{user.name}</Name>

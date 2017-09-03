@@ -40,9 +40,9 @@ export default class Session {
     return this.data.user && this.data.user.name
   }
   /* STORIES */
-  saveStory(story, title){
+  saveStory(story, title, category){
     const { name } = this.data.user
-    const payload = { title, content: story, name }
+    const payload = { title, content: story, name, category }
     return axios.post('/api/story', { story: payload })
   }
   updateStory(story){

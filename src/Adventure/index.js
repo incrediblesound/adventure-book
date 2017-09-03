@@ -3,13 +3,14 @@ import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/index.js'
 import { Weapon, Armor } from './items.jsx'
-import { Panel } from '../components/index.jsx'
+import { Panel, Button } from '../components/index.jsx'
 import Player from './Player.jsx'
 
 const StoryText = styled.p`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 300;
 `;
+
 
 class App extends Component {
   constructor({ content, session }){
@@ -62,14 +63,12 @@ class App extends Component {
     const { player, currentSection } = this.state
     const { text, challenge } = currentSection
     return (
-      <div>
-        <BattleScreen
-          player={player}
-          challenge={challenge}
-          onWin={this.playerWin}
-          onLose={this.restart}
-        />
-      </div>
+      <BattleScreen
+        player={player}
+        challenge={challenge}
+        onWin={this.playerWin}
+        onLose={this.restart}
+      />
     )
   }
   takeReward = (idx) => {
@@ -122,7 +121,7 @@ class App extends Component {
         <StoryText>{ text }</StoryText>
         <p style={{ textAlign: 'center' }}>~</p>
         { this.renderOptions(options) }
-        { options !== 'END' && <div><button onClick={() => this.handleGo()}>GO</button></div> }
+        { options !== 'END' && <div><Button space color="gray" size="large" onClick={() => this.handleGo()}>GO</Button></div> }
         { this.renderRewards() }
       </div>
     )
