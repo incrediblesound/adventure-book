@@ -1,13 +1,20 @@
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
 const {
   User,
   Story
 } = require('./models/models')
-const apiGet = require('./api/get')
+const apiStory = require('./api/story')
 const apiUser = require('./api/user')
 
 const app = new express()
+
+app.use(session({
+  secret: 'blippity-bloppity',
+  resave: false,
+  saveUninitialized: true,
+}))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -16,14 +23,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.post('/api/story', (req, res) => {
-  const { content, title, name } = req.body.story
-  Story.findOne({ title, author: name }).then(result => {
+  const story = req.body.story
+  Story.findOne({ title: story.title, author: story.author }).then(result => {
     if(result !== null){
       res.send({ success: false, reason: 'A story with this name already exists' })
     } else {
-      const storyRecord = new Story({ name: title, author: name, content })
+      const storyRecord = new Story(story)
       storyRecord.save()
-        .then(result => {
+        .then(() => {
           res.send({ success: true })
         })
         .catch(err => {
@@ -44,7 +51,7 @@ app.put('/api/story', (req, res) => {
     })
 })
 
-apiGet(app)
+apiStory(app)
 apiUser(app)
 
 app.listen(8080)

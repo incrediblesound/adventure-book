@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { StoryBox, Category } from '../components/index.jsx'
+
 const StoryContainer = styled.div`
   font-size: 14px;
 `
@@ -13,12 +15,14 @@ export default class Browse extends Component {
     const { session } = this.props
     return session.get('stories', []).map((story, i) => {
       return (
-        <div>
+        <StoryBox>
           <a href={`#view/${story._id}`} key={`${story.title}-${i}`}>
             {story.title || 'error'}
           </a>
           <span> - by {story.author}</span>
-        </div>
+          <Category>{story.category || 'NO CATEGORY'}</Category>
+          <p>{story.description || 'NO DESCRIPTION'}</p>
+        </StoryBox>
       )
     })
   }

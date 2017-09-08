@@ -38,19 +38,22 @@ export default class Browse extends Component {
     this.props.session.logOut()
     this.props.navigate('login')
   }
+
   render(){
     const { session, page } = this.props
-    const user = session.get('user', { name: '' })
-    const isAuthenticated = this.props.session.isAuthenticated()
+    const user = session.get('user', { username: '' })
     return (
       <Header>
         <LeftSide>
           <HeaderLink disabled={page === 'home'} onClick={() => this.props.navigate('home')}>BROWSE</HeaderLink>
           <HeaderLink disabled={page === 'profile'} onClick={() => this.props.navigate('profile')}>MY STORIES</HeaderLink>
+          <HeaderLink disabled={page === 'about'} onClick={() => this.props.navigate('about')}>ABOUT</HeaderLink>
         </LeftSide>
         <RightSide>
-          <Name>{user.name}</Name>
-          <HeaderLink onClick={() => this.handleLogout()}>{ isAuthenticated ? 'LOG OUT' : 'LOG IN' }</HeaderLink>
+          <Name>{user.username}</Name>
+          <HeaderLink onClick={() => this.handleLogout()}>
+            { user.username ? 'LOG OUT' : 'LOG IN' }
+          </HeaderLink>
         </RightSide>
       </Header>
     )

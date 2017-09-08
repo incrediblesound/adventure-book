@@ -14,3 +14,6 @@ export const deepCopy = (source) => {
     return source
   }
 }
+
+export const rndUp = (n) => Math.ceil(Math.random() * n)
+export const rndDown = (n) => Math.floor(Math.random() * n)

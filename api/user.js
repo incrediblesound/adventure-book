@@ -2,33 +2,62 @@ const { User } = require('../models/models.js')
 const emailRegex = /.{1,}\@.{1,}/
 
 module.exports = app => {
-  
+
   app.post('/api/login', (req, res) => {
-    User.findOne(req.body).then(result => {
-      const userExists = result !== null
-      res.send({ userExists, user: result })
+    const { username, password } = req.body
+
+    User.findOne({ username }).then(user => {
+      const userExists = user !== null
+      const clientUser =  userExists && { username: user.username, id: user._id }
+      if (userExists) {
+        user.comparePassword(password, (err, isMatch) => {
+          if (isMatch) {
+            req.session.user = clientUser
+            res.send({ success: true, userExists, user: clientUser})
+          } else {
+            res.send({ success: false, reason: 'Password incorrect'})
+          }
+        })
+      } else {
+        res.send({ userExists, user: clientUser })
+      }
     })
   })
 
   app.post('/api/signup', (req, res) => {
-    const user = req.body
-    if(!emailRegex.test(user.email)){
+    const { username, password, email } = req.body
+    if(!emailRegex.test(email)){
       res.send({ success: false, reason: 'Invalid email' })
     }
-    User.findOne(user).then(result => {
+    User.findOne({ username }).then(result => {
       if(result !== null){
         res.send({ success: false, reason: 'user already exists' })
       } else {
-        const user = new User(user)
+        const user = new User({ username, password, email })
         user.save()
           .then(result => {
-            res.send({ success: true, user: result })
+            const user = { username: result.username, id: result._id }
+            req.session.user = result
+            res.send({ success: true, user })
           })
           .catch(err => {
             res.send({ success: false, reason: err })
           })
       }
     })
+  })
+
+  app.get('/api/logout', (req, res) => {
+    req.session.user = null
+    res.end()
+  })
+
+  app.post('/api/auth', (req, res) => {
+    if(req.session.user){
+      res.send(req.session.user)
+    } else {
+      res.send(false)
+    }
   })
 
 }

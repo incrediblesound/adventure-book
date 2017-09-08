@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Adventure from '../Adventure/'
 import styled from 'styled-components'
+import { InlineHeader } from '../components/index.jsx'
 
 const Error = styled.p`
   color: #FF4136;
@@ -26,18 +27,18 @@ class Story extends Component {
           this.setState({ error: data.error })
         }
       })
-      .catch(response => {
-        this.setState({ error: JSON.stringify(response) })
-      })
+      // .catch(response => {
+      //   this.setState({ error: JSON.stringify(response) })
+      // })
   }
   renderStory(){
     const { session, navigate } = this.props
-    const { author, name, content } = this.state.gameData
+    const { author, title, content } = this.state.gameData
 
     return (
       <div>
-        <h2 style={{ display: 'inline-block', margin: '10px 10px'}}>{name}</h2>
-        <span>{`by ${author}`}</span>
+        <InlineHeader>{title}</InlineHeader>
+        <span style={{ fontSize: '12px'}}>{` by ${author}`}</span>
         <Adventure
           session={session}
           content={content}

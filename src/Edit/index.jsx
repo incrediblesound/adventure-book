@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import compiler from 'story-parser'
+import parser from 'story-parser'
 import styled from 'styled-components'
-import { Title, Story } from '../components/index.jsx'
+import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
+import { categories } from '../Create/constants.js'
+import * as templates from '../Create/templates'
 
 const InputGroup = styled.div`
   margin: 5px;
@@ -19,24 +21,26 @@ export default class Create extends Component {
     this.state = {
       title: '',
       text: '',
+      description: '',
+      category: null,
       error: false,
       id: null
     }
   }
   componentWillMount(){
     const { session } = this.props
-    if(!session.isAuthenticated()){
-      this.props.navigate('login')
-    }
+    session.authenticate()
   }
   componentDidMount(){
     const id = this.props.location.split('/')[1]
     this.props.session.fetchStory(id).then(response => {
       const { data } = response
       if(data.success){
-        const { author, name, content, _id } = data.story
+        const { author, title, category, description, content, _id } = data.story
         this.setState({
-          title: name,
+          title,
+          description,
+          category,
           text: content,
           id: _id,
         })
@@ -45,35 +49,68 @@ export default class Create extends Component {
       }
     })
   }
+  renderCategories(){
+    return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (
+      <Button
+        spaceLeft
+        active={ this.state.category === category }
+        color="gray"
+        onClick={() => this.selectCategory(category)}
+      >
+        {category}
+      </Button>
+    )))
+  }
   submit = () => {
-    const { text, title, id } = this.state
-    const [story, newText, error] = compiler(this.state.text)
+    const { text, title, category, description } = this.state
+    const { result, error } = parser(this.state.text)
     if (error) {
       this.setState({ error })
     } else if (!title) {
-      this.setState({ error: 'You are required to provide a title for your story.' })
+      this.setState({ error: 'You are required to provide a title for your adventure.' })
+    } else if (!category) {
+      this.setState({ error: 'You must chose a category for your adventure.'})
     } else {
-      this.props.session.updateStory({ _id: id, content: text, name: title })
+      this.props.session.updateStory({ content: text, title, category, description })
         .then(response => {
           const { data } = response
           if(!data.success){
-            this.setState({ error: data.reason })
+            const errorMsg = typeof data.reason === 'string' ? data.reason : data.reason.errors.category.message
+            this.setState({ error: errorMsg })
           } else {
             this.props.navigate('profile')
           }
         })
     }
   }
+  addTemplate(type){
+    const template = templates[type]
+    this.setState({
+      text: `${this.state.text}${template}`
+    })
+  }
   render(){
-    const { error, title, text } = this.state
+    const { error, title, text, description } = this.state
 
     return (
       <div>
+      <InputGroup>
+        { this.renderCategories() }
+      </InputGroup>
         <InputGroup>
           <Title
             value={title}
             placeholder="TITLE"
             onChange={(e) => this.setState({ title: e.target.value })}
+          />
+        </InputGroup>
+        <InputGroup>
+          <Story
+            rows={3}
+            cols={50}
+            value={description}
+            placeholder="DESCRIPTION"
+            onChange={(e) => this.setState({ description: e.target.value })}
           />
         </InputGroup>
         <InputGroup>
@@ -86,7 +123,12 @@ export default class Create extends Component {
           />
         </InputGroup>
         <Error>{error || ''}</Error>
-        <button onClick={this.submit}>Submit</button>
+        <Button spaceRight color="green" size="large" onClick={this.submit}>Save</Button>
+        <Button color="gray" title="Player information must be first in your story" spaceLeft onClick={() => this.addTemplate('player')}>+ Player</Button>
+        <Button color="gray" title="A simple page" spaceLeft onClick={() => this.addTemplate('page')}>+ Page</Button>
+        <Button color="gray" title="A page with an item" spaceLeft onClick={() => this.addTemplate('item')}>+ Page w/ Item</Button>
+        <Button color="gray" title="A page with combat" spaceLeft onClick={() => this.addTemplate('challenge')}>+ Page w/ Challenge</Button>
+        <Button color="gray" title="A page with combat and rewards" spaceLeft onClick={() => this.addTemplate('rewards')}>+ Challenge & Reward</Button>
       </div>
     )
   }

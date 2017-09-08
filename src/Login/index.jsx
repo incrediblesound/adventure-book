@@ -32,27 +32,29 @@ export default class Login extends Component {
     super()
     this.state = {
       error: null,
-      isLogin: false,
-      name: '',
+      isLogin: true,
+      username: '',
       password: '',
       email: '',
     }
   }
   auth = () => {
-    const { name, password, email, isLogin } = this.state
+    const { username, password, email, isLogin } = this.state
     if(isLogin){
-      this.props.session.logIn({ name, password })
+      this.props.session.logIn({ username, password })
         .then(({ data }) => {
-          const { userExists, user } = data
+          const { userExists, user, success, reason } = data
           if(!userExists) {
             this.setState({ error: `That user doesn't exist, click "sign up to create it."` })
+          } else if(!success) {
+            this.setState({ error: reason })
           } else {
             this.props.session.startSession(user)
             this.props.navigate('home')
           }
         })
     } else {
-      this.props.session.createUser({ name, password, email })
+      this.props.session.createUser({ username, password, email })
         .then(({ data }) => {
           const { success, user, reason } = data
           if(success){
@@ -62,11 +64,6 @@ export default class Login extends Component {
             this.setState({ error: reason })
           }
         })
-    }
-  }
-  componentDidMount(){
-    if(this.props.session.isAuthenticated()){
-      this.props.navigate('home')
     }
   }
   render(){
@@ -80,20 +77,20 @@ export default class Login extends Component {
         </h2>
         <div>
           <InputGroup>
-            <label>User name { isLogin ? ' or Email' : ''} </label>
-            <input value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })}/>
+            <label>Username { isLogin ? ' or Email' : ''} </label>
+            <input value={this.state.username} onChange={(e) => this.setState({ username: e.target.value })}/>
           </InputGroup>
           {
             !isLogin && (
               <InputGroup>
                 <label>Email </label>
-                <input value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })}/>
+                <input type="email" value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })}/>
               </InputGroup>
             )
           }
           <InputGroup>
             <label>Password</label>
-            <input value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })}/>
+            <input type="password" value={this.state.password} onChange={(e) => this.setState({ password: e.target.value })}/>
           </InputGroup>
           <button onClick={this.auth}>GO</button>
         </div>

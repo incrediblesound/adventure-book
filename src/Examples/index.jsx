@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 import { Panel } from '../components/index.jsx'
-import { example1, example2 } from './example.js'
+import { example1, example2, example3 } from './example.js'
 
 const Example = styled.div`
   border: solid 1px #ddd;
@@ -29,9 +29,15 @@ export default class Examples extends Component {
           </Example>
         </Panel>
         <Panel direction="column">
-          <Expl>If you want to include combat, you must add a player at the beginning of your story with all of the attributes shown in the example below. To add a combat challenge to a page user the CHALLENGE keyword followed by the attributes shown in the example, notice that it is required to indicate the challengers weapon but not their armor. You can also add weapon and armor rewards to be offered to the player after they defeat the opponent.</Expl>
+          <Expl>You can add items that your player can pick up throughout the story. For now items are only used to unlock choices. See the example below to lean how to add items to your story and lock options.</Expl>
           <Example>
             <pre>{ example2 }</pre>
+          </Example>
+        </Panel>
+        <Panel direction="column">
+          <Expl>If you want to include combat, you must add a player at the beginning of your story with all of the attributes shown in the example below. To add a combat challenge to a page user the CHALLENGE keyword followed by the attributes shown in the example, notice that it is required to indicate the challengers weapon but not their armor. You can also add weapon and armor rewards to be offered to the player after they defeat the opponent.</Expl>
+          <Example>
+            <pre>{ example3 }</pre>
           </Example>
         </Panel>
       </div>

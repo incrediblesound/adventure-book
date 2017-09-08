@@ -1,45 +1,45 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const TakeReward = styled.button`
-  width: auto;
-  background-color: #7FDBFF;
-  margin: 0px 5px;
-  border: 1px solid #666;
+import { Value, InlineHeader, Label, Button } from '../components/index.jsx'
+
+const ItemPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 150px;
+  border: solid 1px #DDD;
   border-radius: 5px;
-  &:hover {
-    background-color: #0074D9;
-    color: white;
-  }
-  cursor: pointer;
   padding: 5px;
-
-`
-
-const ItemName = styled.p`
-  border: solid 1px #666;
-  border-radius: 5px;
-  display: inline-block;
-  padding: 3px;
+  margin: 10px 5px;
 `
 
 export const Armor = ({ reward, handleTake }) => {
   return (
-    <div>
-    <ItemName>{reward.name}</ItemName>
-    <span>{` Defense: ${reward.defense} `}</span>
-    <TakeReward onClick={() => handleTake(reward)}>Take</TakeReward>
-    </div>
+    <ItemPanel>
+    <InlineHeader>{reward.name}</InlineHeader>
+    <Value>{` Defense: ${reward.defense} `}</Value>
+    <Button spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    </ItemPanel>
   )
 }
 
 export const Weapon = ({ reward, handleTake }) => {
   return (
-    <div>
-    <ItemName>{reward.name}</ItemName>
-    <span>{` Attack: ${reward.attack} `}</span>
-    <span>{` Speed: ${reward.speed} `}</span>
-    <TakeReward onClick={() => handleTake(reward)}>Take</TakeReward>
-    </div>
+    <ItemPanel>
+    <InlineHeader>{reward.name}</InlineHeader>
+    <Value>{` Attack: ${reward.attack} `}</Value>
+    <Value>{` Speed: ${reward.speed} `}</Value>
+    <Button spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    </ItemPanel>
+  )
+}
+
+export const Item = ({ reward, handleTake }) => {
+  return (
+    <ItemPanel>
+    <InlineHeader>{reward.name}</InlineHeader>
+    <Button spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    </ItemPanel>
   )
 }

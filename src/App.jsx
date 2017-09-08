@@ -10,9 +10,10 @@ import Story from './Story/index.jsx'
 import Profile from './Profile/index.jsx'
 import EditStory from './Edit/index.jsx'
 import Examples from './Examples/index.jsx'
+import About from './About/index.jsx'
 
 const Backing = styled.div`
-  background-color: #EEE;
+  background-color: #e3ffff;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -26,11 +27,11 @@ const Container = styled.div`
   padding: 15px 40px;
   border-radius: 5px;
   box-shadow: 0px 1px 1px 1px #999;
-  margin: 0px 80px;
+  margin: 0px auto;
   position: absolute;
   top: 60px;
   height: 80%;
-  width: 85%;
+  width: 75%;
   left: 20px;
   right: 20px;
   font-family: 'Lato', sans-serif;
@@ -44,6 +45,7 @@ const routes = {
   'profile': Profile,
   'edit': EditStory,
   'examples': Examples,
+  'about': About,
 }
 
 class App extends Component {

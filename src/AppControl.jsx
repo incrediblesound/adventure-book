@@ -35,8 +35,19 @@ export default class AppControl extends Component {
     })
   }
   render(){
-    const navigate = (path) => window.location.replace(`#${path}`)
     const location = this.state.hash
+    const navigate = (path, dirty) => {
+      if(location === 'create' && dirty){
+        const proceed = confirm('Navigating away will destroy any unsaved changes, continue?')
+        if (proceed) {
+          window.location.replace(`#${path}`)
+        }
+      } else {
+        window.location.replace(`#${path}`)
+      }
+    }
+    session.navigate = navigate
+
     if(!location){
       navigate('home')
       return <noscript />

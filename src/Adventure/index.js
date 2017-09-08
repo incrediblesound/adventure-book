@@ -2,20 +2,35 @@ import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/index.js'
-import { Weapon, Armor } from './items.jsx'
-import { Panel, Button } from '../components/index.jsx'
-import Player from './Player.jsx'
+import { Weapon, Armor, Item } from './items.jsx'
+import { Panel, Button, colors, FlexRow } from '../components/index.jsx'
+import Player, { PlayerItems } from './Player.jsx'
 
 const StoryText = styled.p`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 300;
+  font-family: 'Merriweather', serif;
 `;
+
+const Choice = styled.div`
+  width: auto;
+  border: solid 1px #AAA;
+  padding: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  user-select: none;
+  color: ${ props => props.disabled ? '#666' : 'black'};
+  margin: 10px;
+  &:hover {
+    background-color: ${ props => props.disabled ? 'white' : '#EEE'};
+  }
+`
 
 
 class App extends Component {
   constructor({ content, session }){
     super()
-    const [ game ] = parser(content)
+    const game = parser(content).result
     const section = game.pages.filter(section => section.id === 0)[0]
     session.startStory(game)
 
@@ -23,19 +38,13 @@ class App extends Component {
       game,
       currentSectionId: 0,
       currentSection: section,
-      selectedOption: null,
       player: session.gameState.player,
       sectionMeta: session.gameState.getMetaForSection(section),
     }
   }
-  selectOption(target){
-    this.setState({
-      selectedOption: target
-    })
-  }
-  handleGo = () => {
+  handleGo = (selectedOption) => {
     const { session } = this.props
-    const { selectedOption, game } = this.state
+    const { game } = this.state
     const section = game.pages.filter(section => section.id === selectedOption)[0]
     session.gameState.updateSection(selectedOption)
     this.setState({
@@ -47,13 +56,15 @@ class App extends Component {
   }
   restart = () => {
     const { session } = this.props
-    session.startStory(this.state.game)
+    const { game } = this.state
+    session.startStory(game)
+    const section = game.pages.filter(section => section.id === 0)[0]
 
     this.setState({
-      selectedOption: 0,
+      currentSectionId: 0,
+      currentSection: section,
       player: session.gameState.player
-    }, this.handleGo)
-
+    })
   }
   playerWin = () => {
     this.state.sectionMeta.challengePassed = true
@@ -86,29 +97,37 @@ class App extends Component {
           return <Weapon reward={reward} handleTake={() => this.takeReward(key)} />
         case 'armor':
           return <Armor reward={reward} handleTake={() => this.takeReward(key)} />
+        case 'item':
+          return <Item reward={reward} handleTake={() => this.takeReward(key)} />
         default:
           return <noscript />
       }
     })
   }
   renderOptions(options) {
+    const { gameState } = this.props.session
     if(options === 'END'){
       return (
-        <button onClick={() => this.restart()}>Start Over</button>
+        <Button color="green" size="large" onClick={() => this.restart()}>Start Over</Button>
       )
     }
     return options.map(option => {
       const isChecked = this.state.selectedOption === option.target
+      const locked = option.lock && !gameState.playerHasItem(option.lock)
+      if(locked){
+        return (
+          <div>
+            <Choice disabled>
+              {`${option.text} - (requires the ${option.lock} to open)`}
+            </Choice>
+          </div>
+        )
+      }
       return (
         <div>
-          <label>
-            <input
-              type="radio"
-              onChange={() => this.selectOption(option.target)}
-              checked={isChecked}
-            />
-            {` - ${option.text}`}
-          </label>
+          <Choice onClick={() => this.handleGo(option.target)}>
+            {option.text}
+          </Choice>
         </div>
       )
     })
@@ -117,12 +136,11 @@ class App extends Component {
     const { player, currentSection, challenge } = this.state
     const { text, options } = currentSection
     return (
-      <div>
+      <div style={{ width: '100%' }}>
         <StoryText>{ text }</StoryText>
         <p style={{ textAlign: 'center' }}>~</p>
+        <FlexRow>{ this.renderRewards() }</FlexRow>
         { this.renderOptions(options) }
-        { options !== 'END' && <div><Button space color="gray" size="large" onClick={() => this.handleGo()}>GO</Button></div> }
-        { this.renderRewards() }
       </div>
     )
   }
@@ -135,7 +153,8 @@ class App extends Component {
       <Panel>
         { hasBattle ? this.renderBattle() : this.renderChoice()}
       </Panel>
-      <Player player={player} gameState={this.props.session.gameState}/>
+      { player.health && <Player player={player} gameState={this.props.session.gameState}/> }
+      { player.items.length ? <PlayerItems player={player} /> : <noscript /> }
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Label, Value, Button } from '../components/index.jsx'
 import styled from 'styled-components'
+import Target from './Target.jsx'
 import { challengeStrike, playerStrike } from './combat.js'
 
 const rnd = (n) => Math.floor(Math.random() * n)
@@ -42,9 +43,6 @@ const Player = ({ player, coolDown, playerStrike }) => (
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Armor: <Value>{player.armor}</Value></Label>
     <div style={{ width: coolDown + '%', height: '3px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
-    { coolDown == 100 &&
-      <Button space size="large" color="gray" onClick={() => playerStrike()}>ATTACK</Button>
-    }
   </BattlePanel>
 )
 
@@ -55,11 +53,6 @@ const Challenge = ({ challenge, coolDown }) => (
     <div style={{ width: coolDown + '%', height: '3px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
   </BattlePanel>
 )
-
-let animationToggle = 0;
-const shouldAnimate = (n) => {
-  return (n % 2 === 1) || !(n % 4)
-}
 
 export default class BattleScreen extends Component {
   constructor({ player, challenge }){
@@ -106,28 +99,26 @@ export default class BattleScreen extends Component {
     challengeStrike(player, challenge)
   }
   startAnimation = () => {
-    animationToggle++
-    if(shouldAnimate(animationToggle)){
-      this.checkGameConditions()
-      const { playerCoolDown, challengeCoolDown, player, challenge, finished } = this.state
+    this.checkGameConditions()
+    const { playerCoolDown, challengeCoolDown, player, challenge, finished } = this.state
 
-      let nextChallengeCoolDown
-      if(challengeCoolDown === 100){
-        nextChallengeCoolDown = 0
-        this.challengeStrike()
-      } else {
-        nextChallengeCoolDown = challengeCoolDown < 100 ? Math.min(100, challengeCoolDown + challenge.speed) : challengeCoolDown
-      }
-
-      if(!finished){
-        const weapon = player.weapons[player.currentWeapon]
-        this.setState({
-          playerCoolDown: playerCoolDown < 100 ? Math.min(100, playerCoolDown + weapon.speed) : playerCoolDown,
-          challengeCoolDown: nextChallengeCoolDown
-        })
-        requestAnimationFrame(this.startAnimation)
-      }
+    let nextChallengeCoolDown
+    if(challengeCoolDown === 100){
+      nextChallengeCoolDown = 0
+      this.challengeStrike()
     } else {
+      nextChallengeCoolDown = challengeCoolDown < 100 ? Math.min(100, challengeCoolDown + challenge.speed) : challengeCoolDown
+    }
+    if(playerCoolDown === 100){
+      this.target.renderTarget()
+    }
+
+    if(!finished){
+      const weapon = player.weapons[player.currentWeapon]
+      this.setState({
+        playerCoolDown: playerCoolDown < 100 ? Math.min(100, playerCoolDown + weapon.speed) : playerCoolDown,
+        challengeCoolDown: nextChallengeCoolDown
+      })
       requestAnimationFrame(this.startAnimation)
     }
   }
@@ -148,8 +139,9 @@ export default class BattleScreen extends Component {
     }
     return (
       <Wrapper>
-        <Player player={player} coolDown={playerCoolDown} playerStrike={this.playerStrike}/>
+        <Player player={player} coolDown={playerCoolDown}/>
         <Challenge challenge={challenge} coolDown={challengeCoolDown} />
+        <Target ref={ e => this.target = e} playerStrike={this.playerStrike} />
       </Wrapper>
     )
   }

@@ -1,5 +1,4 @@
-const rndUp = (n) => Math.ceil(Math.random() * n)
-const rndDown = (n) => Math.floor(Math.random() * n)
+import { rndUp, rndDown } from '../utilities.js'
 
 const calculateDamage = (attack) => {
   const first = rndUp(attack)

@@ -21,8 +21,15 @@ export default class Session {
     })
   }
   /* AUTHENTICATION */
-  isAuthenticated(){
-    return !!this.data.user
+  authenticate(){
+    axios.post('/api/auth').then(response => {
+      const isAuthenticated = response.data
+      if(!isAuthenticated){
+        this.navigate('login')
+      } else {
+        this.data.user = response.data
+      }
+    })
   }
   startSession(user){
     this.data.user = user
@@ -35,15 +42,17 @@ export default class Session {
   }
   logOut(){
     this.data.user = null;
+    axios.get('/api/logout')
   }
   getUsername(){
-    return this.data.user && this.data.user.name
+    return this.data.user && this.data.user.username
   }
   /* STORIES */
-  saveStory(story, title, category){
-    const { name } = this.data.user
-    const payload = { title, content: story, name, category }
-    return axios.post('/api/story', { story: payload })
+  saveStory(story){
+    const { username } = this.data.user
+    story.author = username
+    story.published = false
+    return axios.post('/api/story', { story })
   }
   updateStory(story){
     return axios.put('api/story', story)

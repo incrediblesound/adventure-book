@@ -16,6 +16,18 @@ const equip = (idx, gameState) => {
   gameState.equip(idx)
 }
 
+export const PlayerItems = ({ player }) => (
+  <Panel>
+    {
+      player.items.map(item => (
+        <Frame>
+            <Value>{item.name}</Value>
+        </Frame>
+      ))
+    }
+  </Panel>
+)
+
 const Player = ({ player, gameState }) => (
     <Panel>
       <Frame>

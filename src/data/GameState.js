@@ -3,9 +3,15 @@ import { deepCopy } from '../utilities'
 class GameState {
   constructor(story, session){
     this.id = `${story.author}/${story.title}`
-    this.player = deepCopy(story.player)
-    this.player.currentHealth = story.player.health
-    this.player.currentWeapon = 0
+    if (story.player) {
+      this.player = deepCopy(story.player)
+      this.player.currentHealth = story.player.health
+      this.player.currentWeapon = 0
+      this.player.items = []
+    } else {
+      this.player = {}
+      this.player.items = []
+    }
     this.sectionMeta = {}
     this.currentSection = 0
     this.session = session
@@ -26,8 +32,14 @@ class GameState {
     } else if(reward.type === 'armor'){
       this.player.defense = reward.defense
       this.player.armor = reward.name
+    } else if(reward.type === 'item'){
+      this.player.items.push(section.rewards[key])
     }
     this.session.update()
+  }
+  playerHasItem(name){
+    const matches = this.player.items.filter(item => item.name === name)
+    return !!matches.length
   }
   equip(idx){
     this.player.currentWeapon = idx
