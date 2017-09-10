@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { StoryBox, Category } from '../components/index.jsx'
+import { StoryBox, Category, Button } from '../components/index.jsx'
 
 const StoryContainer = styled.div`
   font-size: 14px;
@@ -8,19 +8,34 @@ const StoryContainer = styled.div`
 
 export default class Browse extends Component {
   componentWillMount(){
+    this.state = {
+      author: null
+    }
     const { session } = this.props
     session.fetchStories()
+  }
+  setAuthor(author){
+    const { session } = this.props
+    session.fetchStories('author', author)
+    this.setState({ author })
+  }
+  clearAuthor = (author) => {
+    const { session } = this.props
+    session.fetchStories()
+    this.setState({ author: null })
   }
   renderStories(){
     const { session } = this.props
     return session.get('stories', []).map((story, i) => {
+      const { author, title, _id } = story
       return (
         <StoryBox>
-          <a href={`#view/${story._id}`} key={`${story.title}-${i}`}>
-            {story.title || 'error'}
+          <a href={`#view/${_id}`} key={`${title}-${i}`}>
+            {title || 'error'}
           </a>
-          <span> - by {story.author}</span>
-          <Category>{story.category || 'NO CATEGORY'}</Category>
+          <span> - by {author}</span>
+          <Category>{story.category}</Category>
+          <Button color="blue" spaceLeft onClick={() => this.setAuthor(author)}>All adventures by {author}</Button>
           <p>{story.description || 'NO DESCRIPTION'}</p>
         </StoryBox>
       )
@@ -28,10 +43,13 @@ export default class Browse extends Component {
   }
   render(){
     const { navigate } = this.props
+    const { author } = this.state
+    const title = author ? `Adventures by ${author}` : `All Adventures`
     return (
       <div>
         <StoryContainer>
-          <h2>New Stories</h2>
+          <h2>{title}</h2>
+          { author && <Button color="gray" onClick={this.clearAuthor}>All Adventures</Button>}
           {this.renderStories()}
         </StoryContainer>
       </div>

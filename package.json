@@ -35,7 +35,7 @@
     "mongoose": "^4.11.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "story-parser": "file:../story-parser",
+    "story-parser": "1.0.0",
     "styled-components": "^2.1.1"
   },
   "main": "server.js"

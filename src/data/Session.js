@@ -22,13 +22,14 @@ export default class Session {
   }
   /* AUTHENTICATION */
   authenticate(){
-    axios.post('/api/auth').then(response => {
+    return axios.post('/api/auth').then(response => {
       const isAuthenticated = response.data
       if(!isAuthenticated){
         this.navigate('login')
       } else {
         this.data.user = response.data
       }
+      return true
     })
   }
   startSession(user){
@@ -63,7 +64,7 @@ export default class Session {
   fetchStories(category, value){
     let request
     if(category){
-      request = axios.get('/api/stories', { [category]: value })
+      request = axios.get(`/api/stories/${value}`)
     } else {
       request = axios.get('/api/stories')
     }

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from '../Create/constants.js'
 import * as templates from '../Create/templates'
+import validate from '../Create/validateStory'
 
 const InputGroup = styled.div`
   margin: 5px;
@@ -55,7 +56,7 @@ export default class Create extends Component {
         spaceLeft
         active={ this.state.category === category }
         color="gray"
-        onClick={() => this.selectCategory(category)}
+        onClick={() => this.setState({ category })}
       >
         {category}
       </Button>
@@ -64,8 +65,9 @@ export default class Create extends Component {
   submit = () => {
     const { text, title, category, description } = this.state
     const { result, error } = parser(this.state.text)
-    if (error) {
-      this.setState({ error })
+    const storyError = validate(result)
+    if (error || storyError) {
+      this.setState({ error: error || storyError })
     } else if (!title) {
       this.setState({ error: 'You are required to provide a title for your adventure.' })
     } else if (!category) {

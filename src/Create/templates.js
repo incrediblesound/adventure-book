@@ -1,8 +1,7 @@
 export const player = `
 PLAYER "hero"
 HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
-WEAPON "armor"
-ARMOR "leather"
+WEAPON "armor" ARMOR "leather"
 ----------------------------
 `
 

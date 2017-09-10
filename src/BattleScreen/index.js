@@ -61,6 +61,7 @@ export default class BattleScreen extends Component {
     this.state = {
       player,
       challenge,
+      playerLost: false,
       playerCoolDown: 0,
       challengeCoolDown: 0,
       countdown: 3,
@@ -73,8 +74,7 @@ export default class BattleScreen extends Component {
       this.setState({ finished: true })
       this.props.onWin()
     } else if(player.currentHealth < 1){
-      this.setState({ finished: true })
-      this.props.onLose()
+      this.setState({ finished: true, playerLost: true })
     }
   }
   startCountdown = () => {
@@ -102,18 +102,18 @@ export default class BattleScreen extends Component {
     this.checkGameConditions()
     const { playerCoolDown, challengeCoolDown, player, challenge, finished } = this.state
 
-    let nextChallengeCoolDown
-    if(challengeCoolDown === 100){
-      nextChallengeCoolDown = 0
-      this.challengeStrike()
-    } else {
-      nextChallengeCoolDown = challengeCoolDown < 100 ? Math.min(100, challengeCoolDown + challenge.speed) : challengeCoolDown
-    }
-    if(playerCoolDown === 100){
-      this.target.renderTarget()
-    }
-
     if(!finished){
+      let nextChallengeCoolDown
+      if(challengeCoolDown === 100){
+        nextChallengeCoolDown = 0
+        this.challengeStrike()
+      } else {
+        nextChallengeCoolDown = challengeCoolDown < 100 ? Math.min(100, challengeCoolDown + challenge.speed) : challengeCoolDown
+      }
+      if(playerCoolDown === 100){
+        this.target.renderTarget()
+      }
+
       const weapon = player.weapons[player.currentWeapon]
       this.setState({
         playerCoolDown: playerCoolDown < 100 ? Math.min(100, playerCoolDown + weapon.speed) : playerCoolDown,
@@ -126,13 +126,22 @@ export default class BattleScreen extends Component {
     this.startCountdown()
   }
   render(){
-    const { player, challenge, playerCoolDown, challengeCoolDown, countdown } = this.state
+    const { player, challenge, playerCoolDown, challengeCoolDown, countdown, playerLost } = this.state
     if(countdown){
       return (
         <Wrapper>
           <Countdown>
             <Label size="large">Attacker: <Value>{ challenge.name }</Value></Label>
             <h1>{countdown}</h1>
+          </Countdown>
+        </Wrapper>
+      )
+    } else if(playerLost) {
+      return (
+        <Wrapper>
+          <Countdown>
+            <h3>You were defeated by the { challenge.name }</h3>
+            <Button color="green" size="large" onClick={this.props.onLose}>Play Again</Button>
           </Countdown>
         </Wrapper>
       )

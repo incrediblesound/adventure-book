@@ -10,8 +10,9 @@ const StoryContainer = styled.div`
 export default class Browse extends Component {
   componentDidMount(){
     const { session } = this.props
-    session.authenticate()
-    session.fetchStories('author', session.getUsername())
+    session.authenticate().then(() => {
+      session.fetchStories('author', session.getUsername())
+    })
   }
   publish(story, published){
     const { session } = this.props

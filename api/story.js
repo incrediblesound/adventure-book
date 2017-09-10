@@ -2,8 +2,7 @@ const { Story } = require('../models/models.js')
 
 module.exports = app => {
   app.get('/api/stories/', (req, res) => {
-    Story.find()
-      .sort({ dateCreated: -1 })
+    Story.find({ published: true })
       .then(result => {
         res.send({ success: true, stories: result })
       })
@@ -14,14 +13,16 @@ module.exports = app => {
 
   app.get('/api/stories/:author', (req, res) => {
     const { author } = req.params
-    Story.find({ author })
-      .select('title content author')
-      .then(result => {
-        res.send({ success: true, stories: result })
-      })
-      .catch(err => {
-        res.send({ success: false, reason: err })
-      })
+    let query = Story.find({ author })
+    if (author === req.session.username) {
+      query = query.where({ published: true})
+    }
+    query.then(result => {
+      res.send({ success: true, stories: result })
+    })
+    .catch(err => {
+      res.send({ success: false, reason: err })
+    })
   })
 
   app.get('/api/story/:id', (req, res) => {
@@ -40,7 +41,6 @@ module.exports = app => {
         res.send({ success: false, reason: 'couldnt find story!' })
       } else {
         story.published = published
-        console.log(story)
         story.save().then(() => {
           res.send({ success: true })
         })

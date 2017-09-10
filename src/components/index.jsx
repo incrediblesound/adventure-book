@@ -7,6 +7,8 @@ export const colors = {
   'dark-blue': '#0074D9',
   'light-gray': '#DDD',
   'dark-gray': '#999',
+  'dark-yellow': '#FFDC00',
+  'light-yellow': '#fcf8ab'
 }
 
 const btnSizes = {
@@ -97,6 +99,10 @@ export const Story = styled.textarea`
 export const StoryBox = styled.div`
   padding: 7px;
   border: 1px solid #DDD;
+  &:hover {
+    background-color: #f7f7f7;
+  }
+  user-select: none;
   border-radius: 5px;
   margin: 5px 0px;
   p {

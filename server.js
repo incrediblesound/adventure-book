@@ -9,6 +9,8 @@ const apiStory = require('./api/story')
 const apiUser = require('./api/user')
 
 const app = new express()
+app.use(express.static('public'))
+app.use(express.static('dist'))
 
 app.use(session({
   secret: 'blippity-bloppity',
@@ -54,4 +56,4 @@ app.put('/api/story', (req, res) => {
 apiStory(app)
 apiUser(app)
 
-app.listen(8080)
+app.listen(process.env.port || 8080)

@@ -2,27 +2,30 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  devtool: 'eval',
+  // devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
     './src/index.jsx'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'public'),
     filename: 'bundle.js',
     publicPath: '/build/'
   },
   module: {
     loaders: [
       {
-        test: /\.jsx?$/,
-        loaders: ['babel-loader'],
-        include: path.join(__dirname, 'src')
+        test: /\.es6\.js$|\.js$|\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
       },
       {
         test: /\.scss$/,
         loaders: ["style-loader", "css-loader", "sass-loader"]
       }
     ]
-  }
+  },
+  // plugins: [
+  //   new webpack.optimize.UglifyJsPlugin()
+  // ],
 }

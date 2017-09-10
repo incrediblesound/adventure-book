@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from './constants.js'
 import * as templates from './templates'
+import validate from './validateStory'
 
 const InputGroup = styled.div`
   margin-top: 5px;
@@ -43,6 +44,7 @@ export default class Create extends Component {
   submit = () => {
     const { text, title, category, description } = this.state
     const { result, error } = parser(this.state.text)
+    const storyError = validate(result)
     if (error) {
       this.setState({ error })
     } else if (!title) {
@@ -62,16 +64,13 @@ export default class Create extends Component {
         })
     }
   }
-  selectCategory(category){
-    this.setState({ category })
-  }
   renderCategories(){
     return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (
       <Button
         spaceLeft
         active={ this.state.category === category }
         color="gray"
-        onClick={() => this.selectCategory(category)}
+        onClick={() => this.setState({ category })}
       >
         {category}
       </Button>

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const ObjectId = mongoose.Schema.Types.ObjectId
+// const ObjectId = mongoose.Schema.Types.ObjectId
 const SALT_FACTOR = 10
 
 const { categories } = require('../src/Create/constants.js')
 
 
-mongoose.connect('mongodb://localhost/stories')
+mongoose.connect(process.env.DB || 'mongodb://localhost/stories')
 
 const storySchema = mongoose.Schema({
     title: { type: String, reqired: true },

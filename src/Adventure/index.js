@@ -63,7 +63,8 @@ class App extends Component {
     this.setState({
       currentSectionId: 0,
       currentSection: section,
-      player: session.gameState.player
+      player: session.gameState.player,
+      sectionMeta: session.gameState.getMetaForSection(section),
     })
   }
   playerWin = () => {
