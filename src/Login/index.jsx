@@ -77,7 +77,7 @@ export default class Login extends Component {
         </h2>
         <div>
           <InputGroup>
-            <label>Username { isLogin ? ' or Email' : ''} </label>
+            <label>Username</label>
             <input value={this.state.username} onChange={(e) => this.setState({ username: e.target.value })}/>
           </InputGroup>
           {

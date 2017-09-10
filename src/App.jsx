@@ -24,7 +24,7 @@ const Backing = styled.div`
 const Container = styled.div`
   background-color: white;
   overflow-x: scroll;
-  padding: 15px 40px;
+  padding: 7px 40px;
   border-radius: 5px;
   box-shadow: 0px 1px 1px 1px #999;
   margin: 0px auto;
