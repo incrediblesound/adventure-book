@@ -56,4 +56,4 @@ app.put('/api/story', (req, res) => {
 apiStory(app)
 apiUser(app)
 
-app.listen(process.env.port || 8080)
+app.listen(process.env.PORT || 8080)
