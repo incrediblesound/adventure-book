@@ -6,6 +6,9 @@
     "lint": "eslint src",
     "start": "node server.js"
   },
+  "engines": {
+    "node": "8.1.4"
+  },
   "repository": "https://github.com/noahlotzer/react-simple-boilerplate.git",
   "keywords": [],
   "author": "James Edwards",
