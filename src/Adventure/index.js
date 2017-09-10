@@ -26,6 +26,11 @@ const Choice = styled.div`
   }
 `
 
+const Continue = styled.a`
+  cursor: pointer;
+  font-size: 18px;
+`
+
 
 class App extends Component {
   constructor({ content, session }){
@@ -36,6 +41,7 @@ class App extends Component {
 
     this.state = {
       game,
+      textIndex: 0,
       currentSectionId: 0,
       currentSection: section,
       player: session.gameState.player,
@@ -49,6 +55,7 @@ class App extends Component {
     session.gameState.updateSection(selectedOption)
     this.setState({
       currentSection: section,
+      textIndex: 0,
       sectionMeta: session.gameState.getMetaForSection(section),
       currentSectionId: selectedOption,
       selectedOption: null
@@ -62,6 +69,7 @@ class App extends Component {
 
     this.setState({
       currentSectionId: 0,
+      textIndex: 0,
       currentSection: section,
       player: session.gameState.player,
       sectionMeta: session.gameState.getMetaForSection(section),
@@ -134,16 +142,25 @@ class App extends Component {
     })
   }
   renderChoice(){
-    const { player, currentSection, challenge } = this.state
+    const { player, currentSection, challenge, textIndex } = this.state
     const { text, options } = currentSection
-    return (
-      <div style={{ width: '100%' }}>
-        <StoryText>{ text }</StoryText>
+    const currentText = text[textIndex]
+    const hasMore = textIndex < text.length - 1
+    if (hasMore) {
+      return (
+        <div style={{ width: '100%' }}>
+          <StoryText>{ currentText }</StoryText>
+          <Continue onClick={() => this.setState({ textIndex: textIndex + 1})}>Continue...</Continue>
+        </div>)
+    } else {
+      return (
+        <div style={{ width: '100%' }}>
+        <StoryText>{ currentText }</StoryText>
         <p style={{ textAlign: 'center' }}>~</p>
         <FlexRow>{ this.renderRewards() }</FlexRow>
         { this.renderOptions(options) }
-      </div>
-    )
+        </div>)
+    }
   }
   render() {
     const { game, currentSection, sectionMeta, player } = this.state

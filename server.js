@@ -43,8 +43,8 @@ app.post('/api/story', (req, res) => {
 })
 
 app.put('/api/story', (req, res) => {
-  const { content, name, _id } = req.body
-  Story.findByIdAndUpdate(_id, { $set: { content, name }})
+  const { content, title, category, description, _id } = req.body
+  Story.findByIdAndUpdate(_id, { content, title, category, description })
     .then(result => {
       res.send({ success: true })
     })

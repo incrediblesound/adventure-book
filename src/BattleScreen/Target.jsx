@@ -46,7 +46,7 @@ export default class Browse extends Component {
       this.renderGrid()
       const x = 20 + rndDown(100)
       const y = 20 + rndDown(100)
-      context.arc(x, y, 20, 0, 2 * Math.PI, false);
+      context.arc(x, y, 15, 0, 2 * Math.PI, false);
       context.fillStyle = 'red'
       context.fill()
       this.setState({

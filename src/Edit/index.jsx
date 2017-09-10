@@ -63,7 +63,7 @@ export default class Create extends Component {
     )))
   }
   submit = () => {
-    const { text, title, category, description } = this.state
+    const { text, title, category, description, id } = this.state
     const { result, error } = parser(this.state.text)
     const storyError = validate(result)
     if (error || storyError) {
@@ -73,7 +73,7 @@ export default class Create extends Component {
     } else if (!category) {
       this.setState({ error: 'You must chose a category for your adventure.'})
     } else {
-      this.props.session.updateStory({ content: text, title, category, description })
+      this.props.session.updateStory({ content: text, title, category, description, _id: id })
         .then(response => {
           const { data } = response
           if(!data.success){
