@@ -9,6 +9,7 @@ import Player, { PlayerItems } from './Player.jsx'
 const StoryText = styled.p`
   font-size: 18px;
   font-weight: 300;
+  line-height: 1.5;
   font-family: 'Merriweather', serif;
 `;
 
