@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { rndDown } from '../utilities.js'
 
+const TARGET_RADIUS = 15
+
 export default class Browse extends Component {
   constructor(){
     super()
@@ -17,11 +19,26 @@ export default class Browse extends Component {
     return false
   }
   handleClick = (e) => {
-    this.props.playerStrike()
-    this.renderGrid()
-    this.setState({
-      targetRendered: false
-    })
+    const { x, y } = this.state
+    let totalOffsetX = 0
+    let totalOffsetY = 0
+    let canvasX = 0
+    let canvasY = 0
+    let currentElement = e.target
+    do {
+      totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft
+      totalOffsetY += currentElement.offsetTop - currentElement.scrollTop
+    } while(currentElement = currentElement.offsetParent)
+    canvasX = e.pageX - totalOffsetX - window.scrollX
+    canvasY = e.pageY - totalOffsetY - window.scrollY
+    if((canvasX > x-TARGET_RADIUS && canvasX < x+TARGET_RADIUS) &&
+       (canvasY > y-TARGET_RADIUS && canvasY < y+TARGET_RADIUS)){
+      this.props.playerStrike()
+      this.renderGrid()
+      this.setState({
+        targetRendered: false
+      })
+    }
   }
   renderGrid(){
     const context = this.canvas.getContext('2d');
@@ -46,11 +63,13 @@ export default class Browse extends Component {
       this.renderGrid()
       const x = 20 + rndDown(100)
       const y = 20 + rndDown(100)
-      context.arc(x, y, 15, 0, 2 * Math.PI, false);
+      context.arc(x, y, TARGET_RADIUS, 0, 2 * Math.PI, false);
       context.fillStyle = 'red'
       context.fill()
       this.setState({
-        targetRendered: true
+        targetRendered: true,
+        x,
+        y,
       })
     }
   }
