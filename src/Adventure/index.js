@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/index.js'
-import { Weapon, Armor, Item } from './items.jsx'
+import { Weapon, Armor, Item, Recovery } from './items.jsx'
 import { Panel, Button, colors, FlexRow } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
 
@@ -96,10 +96,22 @@ class App extends Component {
     this.props.session.gameState.takeReward(idx)
     this.props.session.update()
   }
+  recoverHealth = () => {
+    const { sectionMeta } = this.state
+    this.props.session.gameState.recoverHealth()
+    sectionMeta.hasHealthRecovery = false
+    
+  }
   renderRewards(){
     const { sectionMeta } = this.state
     const keys = Object.keys(sectionMeta.rewards)
-    return keys.map(key => {
+    let recovery = []
+    if (sectionMeta.hasHealthRecovery) {
+      recovery.push(
+        <Recovery handleClick={this.recoverHealth} />
+      )
+    }
+    return recovery.concat(keys.map(key => {
       const reward = sectionMeta.rewards[key]
       if (reward.obtained) return <noscript />
       switch (reward.type) {
@@ -112,7 +124,7 @@ class App extends Component {
         default:
           return <noscript />
       }
-    })
+    }))
   }
   renderOptions(options) {
     const { gameState } = this.props.session
@@ -128,7 +140,7 @@ class App extends Component {
         return (
           <div>
             <Choice disabled>
-              {`${option.text} - (requires the ${option.lock} to open)`}
+              {`${option.text} - (requires ${option.lock})`}
             </Choice>
           </div>
         )

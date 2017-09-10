@@ -37,6 +37,10 @@ class GameState {
     }
     this.session.update()
   }
+  recoverHealth(){
+    this.player.currentHealth = this.player.health
+    this.session.update()
+  }
   playerHasItem(name){
     const matches = this.player.items.filter(item => item.name === name)
     return !!matches.length
@@ -52,7 +56,8 @@ class GameState {
       let meta = {
         hasChallenge: !!section.challenge,
         challengePassed: false,
-        rewards: {}
+        rewards: {},
+        hasHealthRecovery: section.recoverHealth,
       }
       section.rewards.forEach(reward => {
         meta.rewards[reward.name] = Object.assign({ obtained: false }, reward)

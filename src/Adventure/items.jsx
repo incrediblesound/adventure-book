@@ -14,6 +14,13 @@ const ItemPanel = styled.div`
   margin: 10px 5px;
 `
 
+export const Recovery = ({ handleClick }) => (
+  <ItemPanel>
+    <InlineHeader>Recover Health</InlineHeader>
+    <Button spaceTop color="green" onClick={handleClick}>Heal</Button>
+  </ItemPanel>
+)
+
 export const Armor = ({ reward, handleTake }) => {
   return (
     <ItemPanel>

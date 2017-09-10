@@ -4093,7 +4093,7 @@ var _prodInvariant = __webpack_require__(4),
     _assign = __webpack_require__(5);
 
 var CallbackQueue = __webpack_require__(99);
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 var ReactFeatureFlags = __webpack_require__(104);
 var ReactReconciler = __webpack_require__(30);
 var Transaction = __webpack_require__(47);
@@ -5292,7 +5292,7 @@ module.exports = ReactCurrentOwner;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 
 var emptyFunction = __webpack_require__(15);
 var warning = __webpack_require__(2);
@@ -5843,10 +5843,37 @@ if (!isChromePackagedApp) {
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports) {
+
+const SPACER = 'SPACER'
+
+const ERROR = 'ERROR'
+
+const ERROR_DIDNT_BEGIN = 'ERROR_DIDNT_BEGIN'
+const ERROR_PARSER_FAILED = 'ERROR_PARSER_FAILED'
+
+const IGNORE = 'IGNORE'
+
+const WORD = 'WORD'
+const INTEGER = 'INTEGER'
+
+module.exports = {
+  SPACER,
+  ERROR,
+  ERROR_DIDNT_BEGIN,
+  ERROR_PARSER_FAILED,
+  IGNORE,
+  WORD,
+  INTEGER,
+}
+
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { IGNORE, SPACER } = __webpack_require__(28)
-const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = __webpack_require__(28)
+const { IGNORE, SPACER } = __webpack_require__(25)
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED, WORD, INTEGER } = __webpack_require__(25)
 
 const notSpacer = (n) => n !== SPACER
 const notIgnore = (n) => n !== IGNORE
@@ -5863,7 +5890,9 @@ const apply = (mapFunc, parser) => text => {
 
 const maybe = (parser) => text => {
   const parserResult = parser(text)
-  if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
+  if (parserResult.result === false && (parserResult.parser === WORD || parserResult.parser === INTEGER)) {
+    return { result: IGNORE, text }
+  } else if (parserResult.result === false && parserResult.errorType === ERROR_PARSER_FAILED) {
     return { result: false, text, error: parserResult.error, errorType: parserResult.errorType }
   } else if (parserResult.result === false && parserResult.errorType === ERROR_DIDNT_BEGIN) {
     return { result: IGNORE, text }
@@ -5913,7 +5942,7 @@ module.exports = {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6031,7 +6060,7 @@ module.exports = PooledClass;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6378,28 +6407,6 @@ module.exports = ReactElement;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-const SPACER = 'SPACER'
-
-const ERROR = 'ERROR'
-
-const ERROR_DIDNT_BEGIN = 'ERROR_DIDNT_BEGIN'
-const ERROR_PARSER_FAILED = 'ERROR_PARSER_FAILED'
-
-const IGNORE = 'IGNORE'
-
-module.exports = {
-  SPACER,
-  ERROR,
-  ERROR_DIDNT_BEGIN,
-  ERROR_PARSER_FAILED,
-  IGNORE,
-}
-
-
-/***/ }),
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6716,7 +6723,7 @@ var _assign = __webpack_require__(5);
 var ReactBaseClasses = __webpack_require__(120);
 var ReactChildren = __webpack_require__(290);
 var ReactDOMFactories = __webpack_require__(291);
-var ReactElement = __webpack_require__(27);
+var ReactElement = __webpack_require__(28);
 var ReactPropTypes = __webpack_require__(293);
 var ReactVersion = __webpack_require__(295);
 
@@ -7761,7 +7768,7 @@ if (global.document) {
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = __webpack_require__(28)
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = __webpack_require__(25)
 
 const sequence = (...parsers) => text => {
   let result = []
@@ -9081,8 +9088,8 @@ module.exports = XHRCorsObject;
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { trim } = __webpack_require__(25)
-const { ERROR_PARSER_FAILED } = __webpack_require__(28)
+const { trim } = __webpack_require__(26)
+const { ERROR_PARSER_FAILED, INTEGER } = __webpack_require__(25)
 
 const integer = () => text => {
   text = trim(text)
@@ -9091,7 +9098,7 @@ const integer = () => text => {
     x++
   }
   if (!x) {
-    return { result: false, text, error: 'Expected a number', errorType: ERROR_PARSER_FAILED }
+    return { result: false, text, error: 'Expected a number', errorType: ERROR_PARSER_FAILED, parser: INTEGER }
   }
   let num = parseInt(text.substring(0, x))
   text = text.substring(x)
@@ -9105,7 +9112,7 @@ module.exports = integer
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { trim } = __webpack_require__(25)
+const { trim } = __webpack_require__(26)
 
 const textBlock = () => text => {
   text = trim(text)
@@ -9129,12 +9136,21 @@ module.exports = textBlock
 /* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { trim } = __webpack_require__(25)
+const { trim } = __webpack_require__(26)
+const { ERROR_PARSER_FAILED, WORD } = __webpack_require__(25)
 
 const word = (wordText) => text => {
   text = trim(text)
   for(let i = 0; i < wordText.length; i++){
-    if(wordText[i] !== text[i]) return { result: false, text, error: `Expected the word "${wordText}"` }
+    if (wordText[i] !== text[i]) {
+      return {
+        result: false,
+        text,
+        error: `Expected the word "${wordText}"`,
+        errorType: ERROR_PARSER_FAILED,
+        parser: WORD
+      }
+    }
   }
   text = text.substring(wordText.length)
   return { result: true, text }
@@ -11399,8 +11415,8 @@ module.exports = {
 /* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { apply, atLeast, maybe } = __webpack_require__(25)
-const { IGNORE, SPACER } = __webpack_require__(28)
+const { apply, atLeast, maybe } = __webpack_require__(26)
+const { IGNORE, SPACER } = __webpack_require__(25)
 const arrayOf = __webpack_require__(81)
 const or = __webpack_require__(82)
 const sequence = __webpack_require__(42)
@@ -11436,7 +11452,7 @@ module.exports = parser
 /* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = __webpack_require__(28)
+const { ERROR_DIDNT_BEGIN, ERROR_PARSER_FAILED } = __webpack_require__(25)
 
 const arrayOf = (parser) => (text) => {
   let result = []
@@ -11457,12 +11473,7 @@ const arrayOf = (parser) => (text) => {
     next = parserResult.result
     counter++
   } while(next)
-
-  if (errorType === ERROR_PARSER_FAILED) {
-    return { result: false, text, error, errorType: ERROR_PARSER_FAILED }
-  } else {
     return { result, text }
-  }
 }
 
 module.exports = arrayOf
@@ -12932,7 +12943,7 @@ var _prodInvariant = __webpack_require__(4);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 
 var invariant = __webpack_require__(1);
 
@@ -15342,7 +15353,7 @@ module.exports = REACT_ELEMENT_TYPE;
 
 var ReactCurrentOwner = __webpack_require__(20);
 var ReactComponentTreeHook = __webpack_require__(13);
-var ReactElement = __webpack_require__(27);
+var ReactElement = __webpack_require__(28);
 
 var checkReactTypeSpec = __webpack_require__(296);
 
@@ -18544,7 +18555,11 @@ var App = function (_Component) {
       var sectionMeta = this.state.sectionMeta;
 
       var keys = Object.keys(sectionMeta.rewards);
-      return keys.map(function (key) {
+      var recovery = [];
+      if (sectionMeta.hasHealthRecovery) {
+        recovery.push(_react2.default.createElement(_items.Recovery, { handleClick: this.recoverHealth }));
+      }
+      return recovery.concat(keys.map(function (key) {
         var reward = sectionMeta.rewards[key];
         if (reward.obtained) return _react2.default.createElement('noscript', null);
         switch (reward.type) {
@@ -18563,7 +18578,7 @@ var App = function (_Component) {
           default:
             return _react2.default.createElement('noscript', null);
         }
-      });
+      }));
     }
   }, {
     key: 'renderOptions',
@@ -18591,7 +18606,7 @@ var App = function (_Component) {
             _react2.default.createElement(
               Choice,
               { disabled: true },
-              option.text + ' - (requires the ' + option.lock + ' to open)'
+              option.text + ' - (requires ' + option.lock + ')'
             )
           );
         }
@@ -18739,6 +18754,13 @@ var _initialiseProps = function _initialiseProps() {
     _this5.props.session.gameState.takeReward(idx);
     _this5.props.session.update();
   };
+
+  this.recoverHealth = function () {
+    var sectionMeta = _this5.state.sectionMeta;
+
+    _this5.props.session.gameState.recoverHealth();
+    sectionMeta.hasHealthRecovery = false;
+  };
 };
 
 exports.default = App;
@@ -18753,7 +18775,7 @@ exports.default = App;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Item = exports.Weapon = exports.Armor = undefined;
+exports.Item = exports.Weapon = exports.Armor = exports.Recovery = undefined;
 
 var _templateObject = _taggedTemplateLiteral(['\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n  width: 150px;\n  border: solid 1px #DDD;\n  border-radius: 5px;\n  padding: 5px;\n  margin: 10px 5px;\n'], ['\n  display: flex;\n  flex-direction: column;\n  justify-content: space-around;\n  width: 150px;\n  border: solid 1px #DDD;\n  border-radius: 5px;\n  padding: 5px;\n  margin: 10px 5px;\n']);
 
@@ -18773,9 +18795,27 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 
 var ItemPanel = _styledComponents2.default.div(_templateObject);
 
-var Armor = exports.Armor = function Armor(_ref) {
-  var reward = _ref.reward,
-      handleTake = _ref.handleTake;
+var Recovery = exports.Recovery = function Recovery(_ref) {
+  var handleClick = _ref.handleClick;
+  return _react2.default.createElement(
+    ItemPanel,
+    null,
+    _react2.default.createElement(
+      _index.InlineHeader,
+      null,
+      'Recover Health'
+    ),
+    _react2.default.createElement(
+      _index.Button,
+      { spaceTop: true, color: 'green', onClick: handleClick },
+      'Heal'
+    )
+  );
+};
+
+var Armor = exports.Armor = function Armor(_ref2) {
+  var reward = _ref2.reward,
+      handleTake = _ref2.handleTake;
 
   return _react2.default.createElement(
     ItemPanel,
@@ -18800,9 +18840,9 @@ var Armor = exports.Armor = function Armor(_ref) {
   );
 };
 
-var Weapon = exports.Weapon = function Weapon(_ref2) {
-  var reward = _ref2.reward,
-      handleTake = _ref2.handleTake;
+var Weapon = exports.Weapon = function Weapon(_ref3) {
+  var reward = _ref3.reward,
+      handleTake = _ref3.handleTake;
 
   return _react2.default.createElement(
     ItemPanel,
@@ -18832,9 +18872,9 @@ var Weapon = exports.Weapon = function Weapon(_ref2) {
   );
 };
 
-var Item = exports.Item = function Item(_ref3) {
-  var reward = _ref3.reward,
-      handleTake = _ref3.handleTake;
+var Item = exports.Item = function Item(_ref4) {
+  var reward = _ref4.reward,
+      handleTake = _ref4.handleTake;
 
   return _react2.default.createElement(
     ItemPanel,
@@ -21130,6 +21170,12 @@ var GameState = function () {
       this.session.update();
     }
   }, {
+    key: 'recoverHealth',
+    value: function recoverHealth() {
+      this.player.currentHealth = this.player.health;
+      this.session.update();
+    }
+  }, {
     key: 'playerHasItem',
     value: function playerHasItem(name) {
       var matches = this.player.items.filter(function (item) {
@@ -21152,7 +21198,8 @@ var GameState = function () {
         var meta = {
           hasChallenge: !!section.challenge,
           challengePassed: false,
-          rewards: {}
+          rewards: {},
+          hasHealthRecovery: section.recoverHealth
         };
         section.rewards.forEach(function (reward) {
           meta.rewards[reward.name] = Object.assign({ obtained: false }, reward);
@@ -26595,7 +26642,7 @@ module.exports = EnterLeaveEventPlugin;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 
 var getTextContentAccessor = __webpack_require__(114);
 
@@ -31308,7 +31355,7 @@ var _assign = __webpack_require__(5);
 
 var EventListener = __webpack_require__(92);
 var ExecutionEnvironment = __webpack_require__(10);
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 var ReactDOMComponentTree = __webpack_require__(8);
 var ReactUpdates = __webpack_require__(19);
 
@@ -32225,7 +32272,7 @@ module.exports = ReactPropTypeLocationNames;
 var _assign = __webpack_require__(5);
 
 var CallbackQueue = __webpack_require__(99);
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 var ReactBrowserEventEmitter = __webpack_require__(45);
 var ReactInputSelection = __webpack_require__(106);
 var ReactInstrumentation = __webpack_require__(16);
@@ -32502,7 +32549,7 @@ module.exports = ReactRef;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(26);
+var PooledClass = __webpack_require__(27);
 var Transaction = __webpack_require__(47);
 var ReactInstrumentation = __webpack_require__(16);
 var ReactServerUpdateQueue = __webpack_require__(262);
@@ -34941,7 +34988,7 @@ module.exports = PooledClass;
 
 
 var PooledClass = __webpack_require__(289);
-var ReactElement = __webpack_require__(27);
+var ReactElement = __webpack_require__(28);
 
 var emptyFunction = __webpack_require__(15);
 var traverseAllChildren = __webpack_require__(300);
@@ -35136,7 +35183,7 @@ module.exports = ReactChildren;
 
 
 
-var ReactElement = __webpack_require__(27);
+var ReactElement = __webpack_require__(28);
 
 /**
  * Create a factory that creates HTML tag elements.
@@ -35342,7 +35389,7 @@ module.exports = ReactPropTypeLocationNames;
 
 
 
-var _require = __webpack_require__(27),
+var _require = __webpack_require__(28),
     isValidElement = _require.isValidElement;
 
 var factory = __webpack_require__(96);
@@ -35503,7 +35550,7 @@ module.exports = checkReactTypeSpec;
 var _require = __webpack_require__(120),
     Component = _require.Component;
 
-var _require2 = __webpack_require__(27),
+var _require2 = __webpack_require__(28),
     isValidElement = _require2.isValidElement;
 
 var ReactNoopUpdateQueue = __webpack_require__(123);
@@ -35555,7 +35602,7 @@ module.exports = getNextDebugID;
 
 var _prodInvariant = __webpack_require__(32);
 
-var ReactElement = __webpack_require__(27);
+var ReactElement = __webpack_require__(28);
 
 var invariant = __webpack_require__(1);
 
@@ -38138,7 +38185,7 @@ const word = __webpack_require__(55)
 const integer = __webpack_require__(53)
 const textBlock = __webpack_require__(54)
 const sequence = __webpack_require__(42)
-const { apply } = __webpack_require__(25)
+const { apply } = __webpack_require__(26)
 
 const makeChallenge = (parts) => {
   return {
@@ -38172,7 +38219,7 @@ const word = __webpack_require__(55)
 const integer = __webpack_require__(53)
 const textBlock = __webpack_require__(54)
 const sequence = __webpack_require__(42)
-const { apply } = __webpack_require__(25)
+const { apply } = __webpack_require__(26)
 
 const makePlayer = (parts) => {
   return {
@@ -38208,7 +38255,7 @@ const textBlock = __webpack_require__(54)
 const sequence = __webpack_require__(42)
 const or = __webpack_require__(82)
 const arrayOf = __webpack_require__(81)
-const { apply, atLeast } = __webpack_require__(25)
+const { apply, atLeast } = __webpack_require__(26)
 
 const makeReward = (rewards) => {
   return rewards.map(parts => {
@@ -38279,8 +38326,8 @@ const textBlock = __webpack_require__(54)
 const arrayOf = __webpack_require__(81)
 const or = __webpack_require__(82)
 const sequence = __webpack_require__(42)
-const { apply, atLeast, maybe, notSpacer, notIgnore } = __webpack_require__(25)
-const { SPACER, IGNORE } = __webpack_require__(28)
+const { apply, atLeast, maybe, notSpacer, notIgnore } = __webpack_require__(26)
+const { SPACER, IGNORE } = __webpack_require__(25)
 
 const challenge = __webpack_require__(328)
 const reward = __webpack_require__(330)
@@ -38310,6 +38357,7 @@ const option = () => sequence(
 const page = () => sequence(
   word('PAGE'), integer(),
   arrayOf(textBlock()),
+  maybe(word('RECOVER_HEALTH')),
   maybe(challenge()),
   maybe(reward()),
   or(
@@ -38333,9 +38381,10 @@ const makeSections = (sections) => {
         return {
           id: section[1],
           text: section[2],
-          challenge: section[3] !== IGNORE ? section[3] : undefined,
-          rewards: section[4] !== IGNORE ? section[4] : [],
-          options: Array.isArray(section[5]) ? section[5] : 'END'
+          recoverHealth: section[3] === true,
+          challenge: section[4] !== IGNORE ? section[4] : undefined,
+          rewards: section[5] !== IGNORE ? section[5] : [],
+          options: Array.isArray(section[6]) ? section[6] : 'END'
         }
       }
     })
