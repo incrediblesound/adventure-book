@@ -49,6 +49,14 @@ class App extends Component {
       sectionMeta: session.gameState.getMetaForSection(section),
     }
   }
+  unlockOption = (option) => {
+    const selectedOption = option.target
+    const { sectionMeta } = this.state
+    const { gameState } = this.props.session
+    sectionMeta.options[option.target].isLocked = false
+    gameState.usePlayerItem(option.lock)
+    this.handleGo(selectedOption)
+  }
   handleGo = (selectedOption) => {
     const { session } = this.props
     const { game } = this.state
@@ -100,7 +108,7 @@ class App extends Component {
     const { sectionMeta } = this.state
     this.props.session.gameState.recoverHealth()
     sectionMeta.hasHealthRecovery = false
-    
+
   }
   renderRewards(){
     const { sectionMeta } = this.state
@@ -128,29 +136,32 @@ class App extends Component {
   }
   renderOptions(options) {
     const { gameState } = this.props.session
+    const { sectionMeta } = this.state
     if(options === 'END'){
       return (
         <Button color="green" size="large" onClick={() => this.restart()}>Start Over</Button>
       )
     }
     return options.map(option => {
-      const isChecked = this.state.selectedOption === option.target
-      const locked = option.lock && !gameState.playerHasItem(option.lock)
-      if(locked){
+      const hasLock = !!option.lock
+      const isLocked = sectionMeta.options[option.target].isLocked
+      if (hasLock && isLocked && !gameState.playerHasItem(option.lock)) {
         return (
-          <div>
-            <Choice disabled>
-              {`${option.text} - (requires ${option.lock})`}
-            </Choice>
-          </div>
+          <Choice disabled>
+            {`${option.text} (requires ${option.lock})`}
+          </Choice>
+        )
+      } else if (hasLock && isLocked && gameState.playerHasItem(option.lock)){
+        return (
+          <Choice onClick={() => this.unlockOption(option)}>
+            {`${option.text} (use ${option.lock})`}
+          </Choice>
         )
       }
       return (
-        <div>
-          <Choice onClick={() => this.handleGo(option.target)}>
-            {option.text}
-          </Choice>
-        </div>
+        <Choice onClick={() => this.handleGo(option.target)}>
+          {`${option.text}`}
+        </Choice>
       )
     })
   }

@@ -45,6 +45,19 @@ class GameState {
     const matches = this.player.items.filter(item => item.name === name)
     return !!matches.length
   }
+  usePlayerItem(name){
+    const { items } = this.player
+    let found = false
+    let newList = []
+    for(let i = 0; i < items.length; i++){
+      if(items[i].name === name && !found){
+        found = true
+      } else {
+        newList.push(items[i])
+      }
+    }
+    this.player.items = newList
+  }
   equip(idx){
     this.player.currentWeapon = idx
     this.session.update()
@@ -57,10 +70,16 @@ class GameState {
         hasChallenge: !!section.challenge,
         challengePassed: false,
         rewards: {},
+        options: {},
         hasHealthRecovery: section.recoverHealth,
       }
       section.rewards.forEach(reward => {
         meta.rewards[reward.name] = Object.assign({ obtained: false }, reward)
+      })
+      section.options.forEach(option => {
+        meta.options[option.target] = {
+          isLocked: !!option.lock
+        }
       })
       this.sectionMeta[section.id] = meta
       return meta

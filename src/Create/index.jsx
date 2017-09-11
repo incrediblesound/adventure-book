@@ -36,15 +36,22 @@ export default class Create extends Component {
     session.authenticate()
   }
   addTemplate(type){
-    const { result, error } = parser(this.state.text)
-    const numPages = result && result.pages && result.pages.length
-    if(typeof numPages !== 'number'){
-      this.setState({ error })
-    } else {
+    if(!this.state.text){
       const template = templates[type]
-      this.setState({
-        text: `${this.state.text}${template(numPages)}`
+      return this.setState({
+        text: `${this.state.text}${template(0)}`
       })
+    } else {
+      const { result, error } = parser(this.state.text)
+      const numPages = result && result.pages && result.pages.length
+      if(typeof numPages !== 'number'){
+        this.setState({ error })
+      } else {
+        const template = templates[type]
+        this.setState({
+          text: `${this.state.text}${template(numPages)}`
+        })
+      }
     }
   }
   submit = () => {
