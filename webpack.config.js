@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  // devtool: 'eval',
+  devtool: 'eval',
   entry: './src/index.jsx',
   output: {
     path: path.join(__dirname, 'public'),

@@ -1,44 +1,45 @@
-export const example1 =
-`PAGE 0
-"You are in a room, there is a door to the left and a door to the right.
-It is a dark room."
-OPTION 1 "Take the door on the left"
-OPTION 2 "Take the door on the right"
-OPTION 3 "Take the door at the end of the hall"
---------------------------------------
-PAGE 1
-"You are in an empty room."
-OPTION 0 "Go back"
---------------------------------------
-PAGE 2
-"You are in a bright green field, you made it!"
-(end)
---------------------------------------
-PAGE 3
-"The hall ends in lava, you die!"
-(end)`
-
-export const example2 =
+export const a =
 `
 PAGE 0
-"You are in a room, there is a door to the left and a door to the right.
-It is a dark room."
-OPTION 1 "Take the door at the end of the hall"
-OPTION 2 "Take the door on the right" LOCK "silver key"
---------------------------------------
+"You are in a room with a door"
+OPTION 1 "Go out the door"
+
 PAGE 1
-"There is a silver key in this room!"
-
-REWARD TYPE "item" NAME "silver key"
-
+"Nothing much here"
 OPTION 0 "Go back"
---------------------------------------
-PAGE 2
-"You are in a bright green field, you made it!"
+`
+export const b =
+`
+PAGE 0
+"You are in a room with a door"
+OPTION 1 "Go out the door"
+
+PAGE 1
+"You win!"
 (end)
 `
 
-export const example3 =
+export const c =
+`
+PAGE 0
+"You are in a room, there is a door to the left and a door to the right."
+"Which door do you take?"
+
+OPTION 1 "Take the left door."
+OPTION 2 "Take the right door." LOCK "silver key"
+--------------------------------------
+PAGE 1
+"There is a silver key in this room."
+
+REWARD TYPE "item" NAME "silver key"
+OPTION 0 "Go back"
+--------------------------------------
+PAGE 2
+"You made it!"
+(end)
+`
+
+export const d =
 `
 PLAYER "hero"
 HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
@@ -46,27 +47,49 @@ WEAPON "sword"
 ARMOR "leather"
 --------------------------------------
 PAGE 0
-"You are in a room, there is a door to the left and a door to the right.
-It is a dark room."
-OPTION 1 "Take the door on the right"
-OPTION 2 "Take the door at the end of the hall"
---------------------------------------
-PAGE 1
 "There is a skeleton in this room!"
 
 CHALLENGE "skeleton"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger"
 
-REWARD TYPE "weapon" NAME "magic sword"
-ATTACK 4 SPEED 6
-
-REWARD TYPE "armor" NAME "plate mail"
-DEFENSE 8
-
-OPTION 0
-"Go back"
+OPTION 1 "Leave this cursed place"
 --------------------------------------
-PAGE 2
+PAGE 1
 "You are in a bright green field, you made it!"
 (end)`
+
+export const e =
+`
+PLAYER "hero"
+HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
+WEAPON "sword"
+ARMOR "leather"
+--------------------------------------
+PAGE 0
+"Take the gold to buy the armor"
+
+REWARD TYPE "item" NAME "10 gold"
+
+OPTION 1 "buy armor" LOCK "10 gold"
+OPTION 2 "fight dragon"
+----------------------------------
+PAGE 1
+"Here it is! A suit of excellent armor."
+
+REWARD TYPE "armor" NAME "plate mail" DEFENSE 8
+
+OPTION 0 "go back"
+-------------------------------
+PAGE 2
+"You have defeated the dragon!"
+
+CHALLENGE "dragon"
+HEALTH 5 SPEED 1 ATTACK 5 DEFENSE 4
+WEAPON "fire"
+
+REWARD TYPE "weapon" NAME "magic sword"
+ATTACK 5 SPEED 5
+
+(end)
+`

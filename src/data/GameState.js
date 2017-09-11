@@ -76,11 +76,13 @@ class GameState {
       section.rewards.forEach(reward => {
         meta.rewards[reward.name] = Object.assign({ obtained: false }, reward)
       })
-      section.options.forEach(option => {
-        meta.options[option.target] = {
-          isLocked: !!option.lock
-        }
-      })
+      if(Array.isArray(section.options)){
+        section.options.forEach(option => {
+          meta.options[option.target] = {
+            isLocked: !!option.lock
+          }
+        })
+      }
       this.sectionMeta[section.id] = meta
       return meta
     }

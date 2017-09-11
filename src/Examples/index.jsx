@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 import { Panel } from '../components/index.jsx'
-import { example1, example2, example3 } from './example.js'
+import { a, b, c, d, e } from './example.js'
 
 const Example = styled.div`
   border: solid 1px #ddd;
   border-radius: 3px;
   padding: 10px;
-  margin: 15px 5px;
+  margin: 10px 5px;
 `
 const Expl = styled.p`
   font-weight: 100;
@@ -23,21 +23,33 @@ export default class Examples extends Component {
           There are different kinds of stories that you can create using this platform. Here are a few examples arranged from simplest to most complex.
         </p>
         <Panel direction="column">
-          <Expl>The simplest story consists of a series of numbered pages with options that send the reader to other pages. The special keyword (end) is used to indicate a page with no options. Note that PAGE and OPTION must be capitalized. The dashed line between pages is optional but may help you keep your story organized. Spaces and newlines are ignored except in the quoted text block3.</Expl>
+          <Expl>The simplest story consists of numbered pages with options that send the reader to other pages. This story will read like a choose your own adventure. The example below is as simple as possible: there are two rooms and the user can go back and forth between them.</Expl>
           <Example>
-            <pre>{ example1 }</pre>
+            <pre>{ a }</pre>
           </Example>
         </Panel>
         <Panel direction="column">
-          <Expl>You can add items that your player can pick up throughout the story. For now items are only used to unlock choices. See the example below to lean how to add items to your story and lock options.</Expl>
+          <Expl>Instead of an endless loop, choose your own adventures often have end points where the story ends. To create an ending simple use the keyword (end) like the in example below. When the user reaches an end point they can restart or stop playing.</Expl>
           <Example>
-            <pre>{ example2 }</pre>
+            <pre>{ b }</pre>
           </Example>
         </Panel>
         <Panel direction="column">
-          <Expl>If you want to include combat, you must add a player at the beginning of your story with all of the attributes shown in the example below. To add a combat challenge to a page user the CHALLENGE keyword followed by the attributes shown in the example, notice that it is required to indicate the challengers weapon but not their armor. You can also add weapon and armor rewards to be offered to the player after they defeat the opponent.</Expl>
+          <Expl>You can add items that your player can pick up throughout the story. Items are used to unlock choices. In the example below, you must go in the left door first to get the key before you can go through the right door. Notice the use of dashed lines is optional but helps to separate pages.</Expl>
           <Example>
-            <pre>{ example3 }</pre>
+            <pre>{ c }</pre>
+          </Example>
+        </Panel>
+        <Panel direction="column">
+          <Expl>If you want to include combat you must add a player at the beginning of your story. The format of the player information is very specific so I suggest using the "+ player" template button to add the player to your story. To add a combat challenge to a page user the CHALLENGE keyword followed by the attributes shown in the example. Again, the format of the challengers information is very specific, so I suggest using the "+ Page w/ Challenge" template button to ensure your game parses successfully.</Expl>
+          <Example>
+            <pre>{ d }</pre>
+          </Example>
+        </Panel>
+        <Panel direction="column">
+          <Expl>Finally, you can add weapon and armor upgrades to your game. The example below is a simple game where the player can collect gold to buy a suit of armor, then they fight a dragon and win a magic sword. Remember to make sure you either learn the reward item format exactly or use the templates to avoid errors.</Expl>
+          <Example>
+            <pre>{ e }</pre>
           </Example>
         </Panel>
       </div>
