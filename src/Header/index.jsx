@@ -4,10 +4,10 @@ import styled from 'styled-components'
 const Header = styled.div`
   font-family: 'Lato', sans-serif;
   background-color: white;
-  height: 35px;
+  height: 25px;
   width: 100%;
   border-bottom: solid 1px #999;
-  padding: 10px 5px 0px 5px;
+  padding: 5px 5px 0px 5px;
   display: flex;
   justify-content: space-between;
 `

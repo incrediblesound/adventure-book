@@ -29,7 +29,7 @@ const Container = styled.div`
   box-shadow: 0px 1px 1px 1px #999;
   margin: 0px auto;
   position: absolute;
-  top: 60px;
+  top: 45px;
   height: 90%;
   width: 75%;
   left: 20px;
