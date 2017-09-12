@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from '../Create/constants.js'
 import * as templates from '../Create/templates'
-import validate from '../Create/validateStory'
+import validate, { getLastPage} from '../Create/validateStory'
 
 const InputGroup = styled.div`
   margin: 5px;
@@ -86,15 +86,22 @@ export default class Create extends Component {
     }
   }
   addTemplate(type){
-    const { result, error } = parser(this.state.text)
-    const numPages = result && result.pages && result.pages.length
-    if(typeof numPages !== 'number'){
-      this.setState({ error })
-    } else {
+    if(!this.state.text){
       const template = templates[type]
-      this.setState({
-        text: `${this.state.text}${template(numPages)}`
+      return this.setState({
+        text: `${this.state.text}${template(0)}`
       })
+    } else {
+      const { result, error } = parser(this.state.text)
+      const numPages = getLastPage(result)
+      if(error){
+        this.setState({ error })
+      } else {
+        const template = templates[type]
+        this.setState({
+          text: `${this.state.text}${template(numPages+1)}`
+        })
+      }
     }
   }
   render(){
