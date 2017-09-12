@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from './constants.js'
 import * as templates from './templates'
-import validate from './validateStory'
+import validate, { getLastPage} from './validateStory'
+
 
 const InputGroup = styled.div`
   margin-top: 5px;
@@ -43,13 +44,13 @@ export default class Create extends Component {
       })
     } else {
       const { result, error } = parser(this.state.text)
-      const numPages = result && result.pages && result.pages.length
-      if(typeof numPages !== 'number'){
+      const numPages = getLastPage(result)
+      if(error){
         this.setState({ error })
       } else {
         const template = templates[type]
         this.setState({
-          text: `${this.state.text}${template(numPages)}`
+          text: `${this.state.text}${template(numPages+1)}`
         })
       }
     }

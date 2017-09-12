@@ -21,25 +21,30 @@ export default class Browse extends Component {
     })
   }
   renderStories(){
-    const { session } = this.props
-    return (
-    <div>
-      {
-        session.get('stories', []).map((story, i) => {
-          return (
-            <StoryBox>
-              <a href={`#view/${story._id}`} key={`${story.title}-${i}`}>
-                {story.title || 'error'}
-              </a>
-              <a href={`#edit/${story._id}`}><Button spaceLeft color="blue">EDIT</Button></a>
-              { !story.published && <Button onClick={() => this.publish(story, true)} spaceLeft color="yellow">PUBLISH</Button> }
-              { story.published && <Button onClick={() => this.publish(story, false)} spaceLeft color="yellow">UN-PUBLISH</Button> }
-            </StoryBox>
-          )
-        })
-      }
-    </div>
-    )
+    const { session, navigate } = this.props
+    const stories = session.get('stories', [])
+    if(!stories.length){
+      return (
+        <p>You don't have any adventures yet! Click on the "new adventure" button above to start creating your first adventure, or go to the <a href="javascript:void(0)" onClick={ () => navigate('examples') }> examples page </a> to learn about the features of AdventureBook.</p>
+      )
+    } else {
+      return (
+        <div>
+        { stories.map((story, i) => {
+            return (
+              <StoryBox>
+                <a href={`#view/${story._id}`} key={`${story.title}-${i}`}>
+                  {story.title || 'error'}
+                </a>
+                <a href={`#edit/${story._id}`}><Button spaceLeft color="blue">EDIT</Button></a>
+                { !story.published && <Button onClick={() => this.publish(story, true)} spaceLeft color="yellow">PUBLISH</Button> }
+                { story.published && <Button onClick={() => this.publish(story, false)} spaceLeft color="yellow">UN-PUBLISH</Button> }
+              </StoryBox>
+            )
+          }) }
+        </div>
+      )
+    }
 
   }
   render(){
@@ -47,7 +52,7 @@ export default class Browse extends Component {
     return (
       <div>
         <StoryContainer>
-          <Button size="large" color="green" onClick={() => navigate('create')}>+ New Story</Button>
+          <Button size="large" color="green" onClick={() => navigate('create')}>+ New Adventure</Button>
           {this.renderStories()}
         </StoryContainer>
       </div>

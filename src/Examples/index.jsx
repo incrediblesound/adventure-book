@@ -35,7 +35,7 @@ export default class Examples extends Component {
           </Example>
         </Panel>
         <Panel direction="column">
-          <Expl>You can add items that your player can pick up throughout the story. Items are used to unlock choices. In the example below, you must go in the left door first to get the key before you can go through the right door. Notice the use of dashed lines is optional but helps to separate pages.</Expl>
+          <Expl>You can add items that your player can pick up throughout the story. Items are used to unlock choices. In the example below, you must go in the left door first to get the key before you can go through the right door. The use of dashed lines is optional but helps to separate pages. Notice how page 0 has multiple quoted text blocks. The user must click through each block of text before they get to the options.</Expl>
           <Example>
             <pre>{ c }</pre>
           </Example>

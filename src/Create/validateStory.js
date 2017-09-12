@@ -1,3 +1,12 @@
+export const getLastPage = (story) => {
+  let max = 0
+  story.pages.forEach(page => {
+    if(page.id > max){
+      max = page.id
+    }
+  })
+  return max
+}
 
 const validate = (story) => {
   const targets = []
