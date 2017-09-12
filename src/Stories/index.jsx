@@ -35,7 +35,7 @@ export default class Browse extends Component {
           </a>
           <span> - by {author}</span>
           <Category>{story.category}</Category>
-          <Button color="blue" spaceLeft onClick={() => this.setAuthor(author)}>All adventures by {author}</Button>
+          <Button color="blue" spaceLeft onClick={() => this.setAuthor(author)}>adventures by {author}</Button>
           <p>{story.description || 'NO DESCRIPTION'}</p>
         </StoryBox>
       )

@@ -38,6 +38,11 @@ export default class Login extends Component {
       email: '',
     }
   }
+  handleKeyPress = (e) => {
+    if(e.key === 'Enter'){
+      this.auth()
+    }
+  }
   auth = () => {
     const { username, password, email, isLogin } = this.state
     if(isLogin){
@@ -69,7 +74,7 @@ export default class Login extends Component {
   render(){
     const { isLogin, error } = this.state
     return (
-      <div>
+      <div onKeyPress={this.handleKeyPress}>
         <h2>
           <OptionText onClick={() => this.setState({ isLogin: true })} className={isLogin ? 'active' : 'passive'}>LOGIN</OptionText>
           <span> | </span>
