@@ -47,6 +47,7 @@ export default class Browse extends Component {
         <LeftSide>
           <HeaderLink disabled={page === 'home'} onClick={() => this.props.navigate('home')}>BROWSE</HeaderLink>
           <HeaderLink disabled={page === 'profile'} onClick={() => this.props.navigate('profile')}>MY STORIES</HeaderLink>
+          <HeaderLink disabled={page === 'examples'} onClick={() => this.props.navigate('examples')}>EXAMPLES</HeaderLink>
           <HeaderLink disabled={page === 'about'} onClick={() => this.props.navigate('about')}>ABOUT</HeaderLink>
         </LeftSide>
         <RightSide>
