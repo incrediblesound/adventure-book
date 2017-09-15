@@ -8,7 +8,7 @@ const ItemPanel = styled.div`
   flex-direction: column;
   justify-content: space-around;
   width: 150px;
-  border: solid 1px #DDD;
+  border: solid 2px #DDD;
   border-radius: 5px;
   padding: 5px;
   margin: 10px 5px;

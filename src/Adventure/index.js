@@ -16,14 +16,17 @@ const StoryText = styled.p`
 const Choice = styled.div`
   width: auto;
   border: solid 1px #AAA;
-  padding: 5px;
-  border-radius: 3px;
+  padding: 5px 10px;
+  border-radius: 15px;
   cursor: pointer;
   user-select: none;
   color: ${ props => props.disabled ? '#666' : 'black'};
   margin: 10px;
   &:hover {
     background-color: ${ props => props.disabled ? 'white' : '#EEE'};
+  }
+  p {
+    margin: 0;
   }
 `
 
@@ -148,19 +151,19 @@ class App extends Component {
       if (hasLock && isLocked && !gameState.playerHasItem(option.lock)) {
         return (
           <Choice disabled>
-            {`${option.text} (requires ${option.lock})`}
+            <p>{`${option.text} (requires ${option.lock})`}</p>
           </Choice>
         )
       } else if (hasLock && isLocked && gameState.playerHasItem(option.lock)){
         return (
           <Choice onClick={() => this.unlockOption(option)}>
-            {`${option.text} (use ${option.lock})`}
+            <p>{`${option.text} (use ${option.lock})`}</p>
           </Choice>
         )
       }
       return (
         <Choice onClick={() => this.handleGo(option.target)}>
-          {`${option.text}`}
+          <p>{`${option.text}`}</p>
         </Choice>
       )
     })
@@ -179,10 +182,10 @@ class App extends Component {
     } else {
       return (
         <div style={{ width: '100%' }}>
-        <StoryText>{ currentText }</StoryText>
-        <p style={{ textAlign: 'center' }}>~</p>
-        <FlexRow>{ this.renderRewards() }</FlexRow>
-        { this.renderOptions(options) }
+          <StoryText>{ currentText }</StoryText>
+          <p style={{ textAlign: 'center' }}>~</p>
+          <FlexRow>{ this.renderRewards() }</FlexRow>
+          { this.renderOptions(options) }
         </div>)
     }
   }

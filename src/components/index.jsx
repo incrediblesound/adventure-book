@@ -20,10 +20,9 @@ export const Panel = styled.div`
   position: relative;
   display: flex;
   height: auto;
-  width: 100%;
+  width: auto;
   margin: 15px 0px;
-  box-shadow: 0px 0px 3px 0px #ddd;
-  border: 1px solid #ddd;
+  border: 3px solid #ccc;
   border-radius: 3px;
   padding: 10px;
   flex-direction: ${ props => props.direction || 'row' }

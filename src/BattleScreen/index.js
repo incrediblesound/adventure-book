@@ -39,18 +39,18 @@ const Health = ({ value }) => {
 
 const Player = ({ player, coolDown, playerStrike }) => (
   <BattlePanel>
-    <div><Label>Life: </Label><Health value={Math.floor((player.currentHealth/player.health)*100)} /></div>
+    <div><Label size="large" >Life: <Value>{Math.floor((player.currentHealth/player.health)*100)}%</Value></Label></div>
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Armor: <Value>{player.armor}</Value></Label>
-    <div style={{ width: coolDown + '%', height: '3px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
+    <div style={{ width: coolDown + '%', height: '5px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
   </BattlePanel>
 )
 
 const Challenge = ({ challenge, coolDown }) => (
   <BattlePanel>
-    <div><Label>Life: </Label><Health value={Math.floor((challenge.currentHealth/challenge.health)*100)} /></div>
+    <div><Label size="large" >Life: <Value>{Math.floor((challenge.currentHealth/challenge.health)*100)}%</Value></Label></div>
     <Label>Weapon: <Value>{challenge.weapon}</Value></Label>
-    <div style={{ width: coolDown + '%', height: '3px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
+    <div style={{ width: coolDown + '%', height: '5px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>
   </BattlePanel>
 )
 
@@ -127,6 +127,7 @@ export default class BattleScreen extends Component {
   }
   render(){
     const { player, challenge, playerCoolDown, challengeCoolDown, countdown, playerLost } = this.state
+    const canStrike = playerCoolDown === 100;
     if(countdown){
       return (
         <Wrapper>
