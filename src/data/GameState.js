@@ -7,11 +7,11 @@ class GameState {
       this.player = deepCopy(story.player)
       this.player.currentHealth = story.player.health
       this.player.currentWeapon = 0
-      this.player.items = []
     } else {
       this.player = {}
-      this.player.items = []
     }
+    this.player.items = []
+    this.player.hiddenItems = []
     this.sectionMeta = {}
     this.currentSection = 0
     this.session = session
@@ -23,19 +23,24 @@ class GameState {
   updateSection(id){
     this.currentSection = id
   }
-  takeReward(key){
+  takeItem(key){
     const section = this.sectionMeta[this.currentSection]
     const reward = section.rewards[key]
     reward.obtained = true
     if(reward.type === 'weapon'){
-      this.player.weapons.push(section.rewards[key])
+      this.player.weapons.push(reward)
     } else if(reward.type === 'armor'){
       this.player.defense = reward.defense
       this.player.armor = reward.name
     } else if(reward.type === 'key'){
-      this.player.items.push(section.rewards[key])
+      this.player.items.push(reward)
     }
     this.session.update()
+  }
+  takeHiddenItem(key){
+    const section = this.sectionMeta[this.currentSection]
+    const reward = section.rewards[key]
+    this.player.hiddenItems.push(reward)
   }
   recoverHealth(){
     this.player.currentHealth = this.player.health
@@ -43,6 +48,10 @@ class GameState {
   }
   playerHasItem(name){
     const matches = this.player.items.filter(item => item.name === name)
+    return !!matches.length
+  }
+  playerHasHiddenItem(name){
+    const matches = this.player.hiddenItems.filter(item => item.name === name)
     return !!matches.length
   }
   usePlayerItem(name){

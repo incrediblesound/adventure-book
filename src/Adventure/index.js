@@ -103,10 +103,6 @@ class App extends Component {
       />
     )
   }
-  takeReward = (idx) => {
-    this.props.session.gameState.takeReward(idx)
-    this.props.session.update()
-  }
   recoverHealth = () => {
     const { sectionMeta } = this.state
     this.props.session.gameState.recoverHealth()
@@ -115,6 +111,7 @@ class App extends Component {
   }
   renderRewards(){
     const { sectionMeta } = this.state
+    const { gameState } = this.props.session
     const keys = Object.keys(sectionMeta.rewards)
     if(!keys.length && !sectionMeta.hasHealthRecovery){
       return <div style={{ height: '45px' }} />
@@ -130,11 +127,14 @@ class App extends Component {
       if (reward.obtained) return <noscript />
       switch (reward.type) {
         case 'weapon':
-          return <Weapon reward={reward} handleTake={() => this.takeReward(key)} />
+          return <Weapon reward={reward} handleTake={() => gameState.takeItem(key)} />
         case 'armor':
-          return <Armor reward={reward} handleTake={() => this.takeReward(key)} />
+          return <Armor reward={reward} handleTake={() => gameState.takeItem(key)} />
         case 'key':
-          return <Item reward={reward} handleTake={() => this.takeReward(key)} />
+          return <Item reward={reward} handleTake={() => gameState.takeItem(key)} />
+        case 'hidden':
+          gameState.takeHiddenItem(key)
+          return <noscript />
         default:
           return <noscript />
       }
@@ -163,12 +163,15 @@ class App extends Component {
             <p>{`${option.text} (use ${option.lock})`}</p>
           </Choice>
         )
-      }
-      return (
-        <Choice onClick={() => this.handleGo(option.target)}>
+      } else if (!option.condition || (option.condition && gameState.playerHasHiddenItem(option.condition))) {
+        return (
+          <Choice onClick={() => this.handleGo(option.target)}>
           <p>{`${option.text}`}</p>
-        </Choice>
-      )
+          </Choice>
+        )
+      } else {
+        return <noscript />
+      }
     })
   }
   renderChoice(){
