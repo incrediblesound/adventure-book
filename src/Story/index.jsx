@@ -37,7 +37,7 @@ class Story extends Component {
 
     return (
       <div>
-        <InlineHeader>{title}</InlineHeader>
+        <InlineHeader size="medium">{title}</InlineHeader>
         <span style={{ fontSize: '12px', fontWeight: '700' }}>{` by ${author}`}</span>
         <Adventure
           session={session}

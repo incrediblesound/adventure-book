@@ -73,7 +73,11 @@ export const InlineHeader = styled.span`
   user-select: none;
   text-transform: uppercase;
   font-weight: 400;
-  font-size: ${ props => props.size === 'large' ? '18px;' : '13px;'}
+  font-size: ${ props => {
+      if(props.size === 'large') return '18px;'
+      if(props.size === 'medium') return '15px;'
+      return '13px;'
+  }}
   color: #333;
 `
 

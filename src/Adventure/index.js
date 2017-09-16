@@ -116,6 +116,9 @@ class App extends Component {
   renderRewards(){
     const { sectionMeta } = this.state
     const keys = Object.keys(sectionMeta.rewards)
+    if(!keys.length && !sectionMeta.hasHealthRecovery){
+      return <div style={{ height: '45px' }} />
+    }
     let recovery = []
     if (sectionMeta.hasHealthRecovery) {
       recovery.push(
@@ -183,8 +186,7 @@ class App extends Component {
       return (
         <div style={{ width: '100%' }}>
           <StoryText>{ currentText }</StoryText>
-          <p style={{ textAlign: 'center' }}>~</p>
-          <FlexRow>{ this.renderRewards() }</FlexRow>
+          <FlexRow style={{ minHeight: '80px' }}>{ this.renderRewards() }</FlexRow>
           { this.renderOptions(options) }
         </div>)
     }
