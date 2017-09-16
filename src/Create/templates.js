@@ -16,7 +16,7 @@ OPTION ${n+2} "This option goes to page ${n+2}"
 export const item = (n) => `
 PAGE ${n}
 "this place has a key."
-REWARD TYPE "item" NAME "key"
+ITEM TYPE "key" NAME "key"
 OPTION ${n+1} "This option goes to page ${n+1}"
 OPTION ${n+2} "This option goes to page ${n+2}"
 --------------------------------------
@@ -43,10 +43,10 @@ CHALLENGE "enemy"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
 WEAPON "dagger"
 
-REWARD TYPE "weapon" NAME "magic sword"
+ITEM TYPE "weapon" NAME "magic sword"
 ATTACK 4 SPEED 6
 
-REWARD TYPE "armor" NAME "plate mail"
+ITEM TYPE "armor" NAME "plate mail"
 DEFENSE 8
 
 OPTION ${n+1}

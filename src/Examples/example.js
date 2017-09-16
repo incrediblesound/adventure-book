@@ -31,7 +31,7 @@ OPTION 2 "Take the right door." LOCK "silver key"
 PAGE 1
 "There is a silver key in this room."
 
-REWARD TYPE "item" NAME "silver key"
+ITEM TYPE "key" NAME "silver key"
 OPTION 0 "Go back"
 --------------------------------------
 PAGE 2
@@ -69,7 +69,7 @@ ARMOR "leather"
 PAGE 0
 "Take the gold to buy the armor"
 
-REWARD TYPE "item" NAME "10 gold"
+ITEM TYPE "key" NAME "10 gold"
 
 OPTION 1 "buy armor" LOCK "10 gold"
 OPTION 2 "fight dragon"
@@ -77,7 +77,7 @@ OPTION 2 "fight dragon"
 PAGE 1
 "Here it is! A suit of excellent armor."
 
-REWARD TYPE "armor" NAME "plate mail" DEFENSE 8
+ITEM TYPE "armor" NAME "plate mail" DEFENSE 8
 
 OPTION 0 "go back"
 -------------------------------
@@ -88,7 +88,7 @@ CHALLENGE "dragon"
 HEALTH 5 SPEED 1 ATTACK 5 DEFENSE 4
 WEAPON "fire"
 
-REWARD TYPE "weapon" NAME "magic sword"
+ITEM TYPE "weapon" NAME "magic sword"
 ATTACK 5 SPEED 5
 
 (end)

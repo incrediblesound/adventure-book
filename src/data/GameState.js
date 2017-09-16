@@ -32,7 +32,7 @@ class GameState {
     } else if(reward.type === 'armor'){
       this.player.defense = reward.defense
       this.player.armor = reward.name
-    } else if(reward.type === 'item'){
+    } else if(reward.type === 'key'){
       this.player.items.push(section.rewards[key])
     }
     this.session.update()

@@ -133,7 +133,7 @@ class App extends Component {
           return <Weapon reward={reward} handleTake={() => this.takeReward(key)} />
         case 'armor':
           return <Armor reward={reward} handleTake={() => this.takeReward(key)} />
-        case 'item':
+        case 'key':
           return <Item reward={reward} handleTake={() => this.takeReward(key)} />
         default:
           return <noscript />
@@ -186,7 +186,7 @@ class App extends Component {
       return (
         <div style={{ width: '100%' }}>
           <StoryText>{ currentText }</StoryText>
-          <FlexRow style={{ minHeight: '80px' }}>{ this.renderRewards() }</FlexRow>
+          <FlexRow>{ this.renderRewards() }</FlexRow>
           { this.renderOptions(options) }
         </div>)
     }
