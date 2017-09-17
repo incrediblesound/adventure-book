@@ -44,10 +44,10 @@ export default class Create extends Component {
       })
     } else {
       const { result, error } = parser(this.state.text)
-      const numPages = getLastPage(result)
       if(error){
         this.setState({ error })
       } else {
+        const numPages = getLastPage(result)
         const template = templates[type]
         this.setState({
           text: `${this.state.text}${template(numPages+1)}`
