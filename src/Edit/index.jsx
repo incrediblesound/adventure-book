@@ -95,6 +95,11 @@ export default class Create extends Component {
       const { result, error } = parser(this.state.text)
       if(error){
         this.setState({ error })
+      } else if (!result.pages.length) {
+        const template = templates[type]
+        this.setState({
+          text: `${this.state.text}${template(0)}`
+        })
       } else {
         const numPages = getLastPage(result)
         const template = templates[type]
