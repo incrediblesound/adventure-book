@@ -120,7 +120,7 @@ export default class BattleScreen extends Component {
     const { challenge, player, battleLog } = this.state
     let newLog = battleLog
     if (battleLog.split('\n').length > 9){
-      newLog = battleLog.slice(3)
+      newLog = battleLog.split('\n').slice(3).join('\n')
     }
     const { hit, damage } = challengeStrike(player, challenge)
     if (hit) {
