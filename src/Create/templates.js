@@ -1,7 +1,8 @@
 export const player = () => `
 PLAYER "hero"
-HEALTH 10 SPEED 3 ATTACK 3 DEFENSE 4
-WEAPON "armor" ARMOR "leather"
+HEALTH 20 ATTACK 3 DEFENSE 4
+ITEM TYPE "weapon" NAME "sword" DAMAGE 3 SPEED 4
+ITEM TYPE "armor" NAME "leather" DEFENSE 1
 ----------------------------
 `
 
@@ -27,8 +28,8 @@ PAGE ${n}
 "There is an enemy in this room!"
 
 CHALLENGE "enemy"
-HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
-WEAPON "dagger"
+HEALTH 5 SPEED 3 ATTACK 3 DEFENSE 4
+WEAPON "dagger" DAMAGE 2
 
 OPTION ${n+1}
 "Go to ${n+1}"
@@ -41,10 +42,10 @@ PAGE ${n}
 
 CHALLENGE "enemy"
 HEALTH 5 SPEED 3 ATTACK 1 DEFENSE 4
-WEAPON "dagger"
+WEAPON "dagger" DAMAGE 2
 
 ITEM TYPE "weapon" NAME "magic sword"
-ATTACK 4 SPEED 6
+DAMAGE 4 SPEED 6
 
 ITEM TYPE "armor" NAME "plate mail"
 DEFENSE 8
