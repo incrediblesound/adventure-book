@@ -65,7 +65,7 @@ export default class Create extends Component {
   submit = () => {
     const { text, title, category, description, id } = this.state
     const { result, error } = parser(this.state.text)
-    const storyError = validate(result)
+    const storyError = result && validate(result)
     if (error || storyError) {
       this.setState({ error: error || storyError })
     } else if (!title) {

@@ -22,6 +22,10 @@ export const Panel = styled.div`
   height: auto;
   width: auto;
   margin: 15px 0px;
+  ${ props => props.spaceTop ? 'margin-top: 10px;' : '' }
+  ${ props => props.spaceLeft ? 'margin-left: 10px;' : '' }
+  ${ props => props.spaceBottom ? 'margin-bottom: 10px;' : '' }
+  ${ props => props.spaceRight ? 'margin-right: 10px;' : '' }
   border: 3px solid #ccc;
   border-radius: 3px;
   padding: 10px;
@@ -36,7 +40,10 @@ export const Button = styled.button`
     : colors[`light-${props.color}`]
   };
   &:hover {
-    background-color: ${ props => colors[`dark-${props.color}`]};
+    background-color: ${ props => !props.disabled
+      ? colors[`dark-${props.color}`]
+      : colors[`light-${props.color}`]
+    };
     color: white;
   }
   margin-top: ${ props => props.spaceTop ? '5px' : '0px' };
@@ -45,7 +52,7 @@ export const Button = styled.button`
   margin-right: ${ props => props.spaceRight ? '5px' : '0px' };
   border: none;
   border-radius: 5px;
-  cursor: pointer;
+  cursor: ${ props => props.disabled ? 'default' : 'pointer' };
   padding: ${ props => props.size ? btnSizes[props.size] : '5px' };
 `
 
@@ -124,4 +131,12 @@ export const Category = styled.div`
 export const FlexRow = styled.div`
   display: flex;
   flex-direction: row;
+  height: ${ props => props.height || 'auto'};
+  width: ${ props => props.width || 'auto'};
+`
+export const FlexColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: ${ props => props.height || 'auto'};
+  width: ${ props => props.width || 'auto'};
 `

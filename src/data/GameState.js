@@ -5,13 +5,30 @@ class GameState {
     this.id = `${story.author}/${story.title}`
     if (story.player) {
       this.player = deepCopy(story.player)
+      this.player.items = []
+      this.player.hiddenItems = []
+      this.player.weapons = []
       this.player.currentHealth = story.player.health
       this.player.currentWeapon = 0
+      story.player.items.forEach(item => {
+        switch(item.type){
+          case 'weapon':
+            this.player.weapons.push(item)
+            break;
+          case 'armor':
+            this.player.armor = item
+            break;
+          case 'key':
+            this.player.items.push(item)
+            break;
+        }
+      })
     } else {
-      this.player = {}
+      this.player = {
+        items: [],
+        hiddenItems: [],
+      }
     }
-    this.player.items = []
-    this.player.hiddenItems = []
     this.sectionMeta = {}
     this.currentSection = 0
     this.session = session
@@ -30,8 +47,7 @@ class GameState {
     if(reward.type === 'weapon'){
       this.player.weapons.push(reward)
     } else if(reward.type === 'armor'){
-      this.player.defense = reward.defense
-      this.player.armor = reward.name
+      this.player.armor = reward
     } else if(reward.type === 'key'){
       this.player.items.push(reward)
     }

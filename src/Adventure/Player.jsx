@@ -1,5 +1,5 @@
 import React from 'react'
-import { Panel, Label, Value, HighlightLabel } from '../components/index.jsx'
+import { Panel, Label, Value, HighlightLabel, Button } from '../components/index.jsx'
 import styled from 'styled-components'
 
 const Frame = styled.div`
@@ -29,12 +29,12 @@ export const PlayerItems = ({ player }) => (
 )
 
 const Player = ({ player, gameState }) => (
-    <Panel>
+    <Panel spaceBottom>
       <Frame>
       <Label>Total Health: <Value>{'' + player.health}</Value></Label>
       <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
-      <Label>Armor: <Value>{player.armor}</Value></Label>
-      <Label>Defense: <Value>{'' + player.defense}</Value></Label>
+      <Label>Armor: <Value>{player.armor.name}</Value></Label>
+      <Label>Defense: <Value>{`${player.defense + player.armor.defense}`}</Value></Label>
       </Frame>
       {
         player.weapons.map((weapon, idx) => {
@@ -49,7 +49,7 @@ const Player = ({ player, gameState }) => (
               {
                 inUse
                   ? <HighlightLabel>Equipped</HighlightLabel>
-                  : <button onClick={() => equip(idx, gameState)}>EQUIP</button>
+                  : <Button color="blue" onClick={() => equip(idx, gameState)}>EQUIP</Button>
               }
             </Frame>
           )

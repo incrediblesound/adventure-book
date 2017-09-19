@@ -35,7 +35,7 @@ export const Weapon = ({ reward, handleTake }) => {
   return (
     <ItemPanel>
     <InlineHeader>{reward.name}</InlineHeader>
-    <Value>{` Attack: ${reward.attack} `}</Value>
+    <Value>{` Damage: ${reward.damage} `}</Value>
     <Value>{` Speed: ${reward.speed} `}</Value>
     <Button spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
     </ItemPanel>

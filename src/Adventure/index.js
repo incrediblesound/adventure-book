@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
-import BattleScreen from '../BattleScreen/index.js'
+import BattleScreen from '../BattleScreen/turnBattle.js'
 import { Weapon, Armor, Item, Recovery } from './items.jsx'
 import { Panel, Button, colors, FlexRow } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
@@ -200,7 +200,7 @@ class App extends Component {
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
     return (
       <div>
-      <Panel>
+      <Panel spaceBottom>
         { hasBattle ? this.renderBattle() : this.renderChoice()}
       </Panel>
       { player.health && <Player player={player} gameState={this.props.session.gameState}/> }

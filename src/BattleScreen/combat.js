@@ -6,25 +6,30 @@ const calculateDamage = (attack) => {
   return Math.max(first, second)
 }
 
-const didHit = (defense) => {
-  const first = rndDown(20)
-  const second = rndDown(20)
-  return first > defense || second > defense
+const didHit = (attack, defense) => {
+  const baseLine = 10
+  const difference = attack - defense
+  const strikeNumber = baseLine - difference
+  const hitOne = rndDown(20)
+  const hitTwo = rndDown(20)
+  return hitOne > strikeNumber || hitTwo > strikeNumber
 }
 
 export const playerStrike = (player, challenge) => {
   const weapon = player.weapons[player.currentWeapon]
-  if(didHit(challenge.defense)){
-    const damage = calculateDamage(weapon.attack)
-    challenge.currentHealth -= damage
-    return true
+  if(didHit(player.attack, challenge.defense)){
+    const damage = calculateDamage(weapon.damage)
+    return { hit: true, damage }
   }
-  return false
+  return { hit: false }
 }
 
 export const challengeStrike = (player, challenge) => {
-  if(didHit(player.defense)){
-    const damage = calculateDamage(challenge.attack)
-    player.currentHealth -= damage
+  const playerDefense = player.defense + (player.armor ? player.armor.defense : 0)
+  if(didHit(challenge.attack, playerDefense)){
+    const damage = calculateDamage(challenge.damage)
+    return { hit: true, damage }
+  } else {
+    return { hit: false }
   }
 }
