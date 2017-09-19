@@ -84,6 +84,9 @@ export default class BattleScreen extends Component {
       isPlayersTurn: weapon.speed > challenge.speed,
     }
   }
+  componentDidMount(){
+    this.nextTurn()
+  }
   checkGameConditions(){
     const { player, challenge, battleLog } = this.state
     if(challenge.currentHealth < 1){

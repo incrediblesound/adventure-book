@@ -198,13 +198,14 @@ class App extends Component {
     const { game, currentSection, sectionMeta, player } = this.state
     const { text, options } = currentSection
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
+    const showItems = !hasBattle && player.items.length
     return (
       <div>
       <Panel spaceBottom>
         { hasBattle ? this.renderBattle() : this.renderChoice()}
       </Panel>
       { player.health && <Player player={player} gameState={this.props.session.gameState}/> }
-      { player.items.length ? <PlayerItems player={player} /> : <noscript /> }
+      { showItems ? <PlayerItems player={player} /> : <noscript /> }
       </div>
     );
   }
