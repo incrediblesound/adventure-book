@@ -78,7 +78,7 @@ export default class BattleScreen extends Component {
     this.state = {
       player,
       challenge,
-      battleLog: `${player.name} is facing a ${challenge.name}\n`,
+      battleLog: `${player.name} is facing ${challenge.name}\n`,
       playerLost: false,
       finished: false,
       isPlayersTurn: weapon.speed > challenge.speed,
@@ -124,14 +124,14 @@ export default class BattleScreen extends Component {
     }
     const { hit, damage } = challengeStrike(player, challenge)
     if (hit) {
-      player  .currentHealth -= damage
+      player.currentHealth -= damage
     }
     const text = hit
       ? `${challenge.name} strikes ${player.name} for ${damage} damage\n`
       : `${challenge.name} attacks and misses\n`
     this.setState({
       isPlayersTurn: true,
-      battleLog: `${battleLog}${text}`
+      battleLog: `${newLog}${text}`
     }, this.nextTurn)
   }
   nextTurn = () => {
