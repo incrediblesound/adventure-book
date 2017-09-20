@@ -204,8 +204,8 @@ export default class BattleScreen extends Component {
             <Log>{battleLog}</Log>
             <Panel spaceLeft>
             <FlexColumn>
-              <Label margin="3px 0px">{player.name} Attack score: <Value>{playerAttackNumber}</Value></Label>
-              <Label margin="3px 0px">{challenge.name} Attack score: <Value>{challengeAttackNumber}</Value></Label>
+              <Label margin="3px 0px">{player.name} Attack bonus: <Value>{playerAttackNumber}</Value></Label>
+              <Label margin="3px 0px">{challenge.name} Attack bonus: <Value>{challengeAttackNumber}</Value></Label>
               <Label margin="3px 0px 10px 0px">Speed advantage: <Value>{speed} {time}</Value></Label>
               {
                 isPlayersTurn
