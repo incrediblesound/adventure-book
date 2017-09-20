@@ -57,6 +57,7 @@ export const Button = styled.button`
 `
 
 export const Label = styled.p`
+  margin: ${ props => props.margin || '5px 0px'};
   user-select: none;
   text-transform: uppercase;
   font-weight: 100;

@@ -43,7 +43,7 @@ const Player = ({ player, gameState }) => (
             <Frame>
               <div>
                 <Value>{weapon.name}</Value>
-                <Label>Attack: <Value>{weapon.attack}</Value></Label>
+                <Label>Damage: <Value>{weapon.damage}</Value></Label>
                 <Label>Speed: <Value>{weapon.speed}</Value></Label>
               </div>
               {

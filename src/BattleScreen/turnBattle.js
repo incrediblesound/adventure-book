@@ -14,9 +14,8 @@ const Wrapper = styled.div`
   opacity: ${props => props.fade ? '0' : '1' };
 `
 
-const Countdown = styled.div`
-  height: 100px;
-  padding: 100px 140px;
+const CenteredBox = styled.div`
+  min-height: 100px;
   text-align: center;
   baseline: center;
 `
@@ -78,14 +77,19 @@ export default class BattleScreen extends Component {
     this.state = {
       player,
       challenge,
+      playerSpeed: weapon.speed,
+      challengeSpeed: challenge.speed,
       battleLog: `${player.name} is facing ${challenge.name}\n`,
       playerLost: false,
       finished: false,
-      isPlayersTurn: weapon.speed > challenge.speed,
+      isPlayersTurn: weapon.speed >= challenge.speed,
+      started: false,
     }
   }
-  componentDidMount(){
-    this.nextTurn()
+  begin = () => {
+    this.setState({
+      started: true
+    }, this.nextTurn)
   }
   checkGameConditions(){
     const { player, challenge, battleLog } = this.state
@@ -100,13 +104,15 @@ export default class BattleScreen extends Component {
     } else if(player.currentHealth < 1){
       this.setState({
         finished: true,
-        playerLost: true,
         battleLog: `${battleLog}You have been defeated by ${challenge.name}!\n`
       })
+      setTimeout(() => {
+        this.setState({ playerLost: true })
+      }, 1000)
     }
   }
   playerStrike = () => {
-    const { challenge, player, battleLog } = this.state
+    const { challenge, player, battleLog, challengeSpeed, playerSpeed } = this.state
     const { hit, damage } = playerStrike(player, challenge)
     if (hit) {
       challenge.currentHealth -= damage
@@ -114,13 +120,15 @@ export default class BattleScreen extends Component {
     const text = hit
       ? `${player.name} strikes ${challenge.name} for ${damage} damage\n`
       : `${player.name} attacks and misses\n`
+    const nextChallengeSpeed = challengeSpeed + challenge.speed
     this.setState({
-      isPlayersTurn: false,
+      isPlayersTurn: playerSpeed >= nextChallengeSpeed,
+      challengeSpeed: nextChallengeSpeed,
       battleLog: `${battleLog}${text}`
     }, this.nextTurn)
   }
   challengeStrike(){
-    const { challenge, player, battleLog } = this.state
+    const { challenge, player, battleLog, challengeSpeed, playerSpeed } = this.state
     let newLog = battleLog
     if (battleLog.split('\n').length > 5){
       newLog = ''
@@ -132,8 +140,11 @@ export default class BattleScreen extends Component {
     const text = hit
       ? `${challenge.name} strikes ${player.name} for ${damage} damage\n`
       : `${challenge.name} attacks and misses\n`
+    const weapon = player.weapons[player.currentWeapon]
+    const nextPlayerSpeed = playerSpeed + weapon.speed
     this.setState({
-      isPlayersTurn: true,
+      isPlayersTurn: nextPlayerSpeed >= challengeSpeed,
+      playerSpeed: nextPlayerSpeed,
       battleLog: `${newLog}${text}`
     }, this.nextTurn)
   }
@@ -147,19 +158,41 @@ export default class BattleScreen extends Component {
     }
   }
   render(){
-    const { player, challenge, playerLost, isPlayersTurn, battleLog, finished } = this.state
+    const {
+      player, playerSpeed,
+      challenge, challengeSpeed,
+      playerLost,
+      isPlayersTurn,
+      battleLog,
+      finished,
+      started,
+     } = this.state
     const playerAttackNumber = player.attack - challenge.defense
     const challengeAttackNumber = challenge.attack - (player.defense + player.armor.defense)
+    if(!started) {
+      return (
+        <Wrapper>
+        <CenteredBox>
+          <h3>{ challenge.text }</h3>
+          <Button color="gray" size="large" onClick={this.begin}>Start Battle</Button>
+        </CenteredBox>
+      </Wrapper>
+      )
+    }
     if(playerLost) {
       return (
         <Wrapper>
-          <Countdown>
+          <CenteredBox>
             <h3>You were defeated by the { challenge.name }</h3>
             <Button color="green" size="large" onClick={this.props.onLose}>Play Again</Button>
-          </Countdown>
+          </CenteredBox>
         </Wrapper>
       )
     }
+    let speed = isPlayersTurn ? player.name : challenge.name
+    let time = isPlayersTurn
+      ? `+${playerSpeed - challengeSpeed}`
+      : `+${challengeSpeed - playerSpeed}`
     return (
       <Wrapper fade={finished}>
         <FlexColumn height='100%'>
@@ -171,8 +204,9 @@ export default class BattleScreen extends Component {
             <Log>{battleLog}</Log>
             <Panel spaceLeft>
             <FlexColumn>
-              <Label>{player.name} attack bonus: <Value>{playerAttackNumber}</Value></Label>
-              <Label>{challenge.name} attack bonus: <Value>{challengeAttackNumber}</Value></Label>
+              <Label margin="3px 0px">{player.name} Attack score: <Value>{playerAttackNumber}</Value></Label>
+              <Label margin="3px 0px">{challenge.name} Attack score: <Value>{challengeAttackNumber}</Value></Label>
+              <Label margin="3px 0px 10px 0px">Speed advantage: <Value>{speed} {time}</Value></Label>
               {
                 isPlayersTurn
                 ? <Button color="green" disabled={!isPlayersTurn} onClick={this.playerStrike}>Strike</Button>
