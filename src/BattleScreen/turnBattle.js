@@ -20,9 +20,17 @@ const CenteredBox = styled.div`
   baseline: center;
 `
 
-const BattlePanel = styled.div`
+const ClearPanel = styled.div`
    width: 50%;
    margin: 5px 15px;
+`
+
+const BattlePanel = styled.div`
+  margin: 0px 0px 0px 10px;
+  width: 50%;
+  padding: 7px;
+  height: auto;
+  border: 3px solid #ccc;
 `
 
 const Log = styled.pre`
@@ -49,24 +57,24 @@ const Health = ({ value }) => {
 }
 
 const Player = ({ player, playerStrike }) => (
-  <BattlePanel>
+  <ClearPanel>
     <div><Label size="large">{player.name}</Label></div>
     <div><Label>Life: <Value>{player.currentHealth}</Value></Label></div>
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Damage: <Value>{player.weapons[player.currentWeapon].damage}</Value></Label>
     <Label>Armor: <Value>{player.armor.name}</Value></Label>
     <Label>Defense: <Value>{`${player.defense + player.armor.defense}`}</Value></Label>
-  </BattlePanel>
+  </ClearPanel>
 )
 
 const Challenge = ({ challenge }) => (
-  <BattlePanel>
+  <ClearPanel>
     <div><Label size="large">{challenge.name}</Label></div>
     <div><Label>Life: <Value>{challenge.currentHealth}</Value></Label></div>
     <Label>Defense: <Value>{challenge.defense}</Value></Label>
     <Label>Weapon: <Value>{challenge.weapon}</Value></Label>
     <Label>Damage: <Value>{challenge.damage}</Value></Label>
-  </BattlePanel>
+  </ClearPanel>
 )
 
 export default class BattleScreen extends Component {
@@ -191,8 +199,9 @@ export default class BattleScreen extends Component {
     }
     let speed = isPlayersTurn ? player.name : challenge.name
     let time = isPlayersTurn
-      ? `+${playerSpeed - challengeSpeed}`
-      : `+${challengeSpeed - playerSpeed}`
+      ? playerSpeed - challengeSpeed
+      : challengeSpeed - playerSpeed
+    time = time === 0 ? '' : `+${time}`
     return (
       <Wrapper fade={finished}>
         <FlexColumn height='100%'>
@@ -202,18 +211,18 @@ export default class BattleScreen extends Component {
           </FlexRow>
           <FlexRow height='50%'>
             <Log>{battleLog}</Log>
-            <Panel spaceLeft>
+            <BattlePanel>
             <FlexColumn>
               <Label margin="3px 0px">{player.name} Attack bonus: <Value>{playerAttackNumber}</Value></Label>
               <Label margin="3px 0px">{challenge.name} Attack bonus: <Value>{challengeAttackNumber}</Value></Label>
-              <Label margin="3px 0px 10px 0px">Speed advantage: <Value>{speed} {time}</Value></Label>
+              <Label margin="3px 0px 10px 0px">Initiative: <Value>{speed} {time}</Value></Label>
               {
                 isPlayersTurn
                 ? <Button color="green" disabled={!isPlayersTurn} onClick={this.playerStrike}>Strike</Button>
                 : <p>{challenge.name} is attacking...</p>
               }
             </FlexColumn>
-            </Panel>
+            </BattlePanel>
           </FlexRow>
         </FlexColumn>
       </Wrapper>
