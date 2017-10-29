@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/turnBattle.js'
-import { Weapon, Armor, Item, Recovery } from './items.jsx'
+import { Weapon, Armor, Item, Recovery, HealthItem } from './items.jsx'
 import { Panel, Button, colors, FlexRow } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
+import { rndDown } from '../utilities.js'
 
 const StoryText = styled.p`
   font-size: 18px;
@@ -34,7 +35,23 @@ const Continue = styled.a`
   cursor: pointer;
   font-size: 18px;
 `
-
+const rewardComponent = (reward, gameState, key) => {
+  switch (reward.type) {
+    case 'weapon':
+      return <Weapon reward={reward} handleTake={() => gameState.takeItem(key)} />
+    case 'armor':
+      return <Armor reward={reward} handleTake={() => gameState.takeItem(key)} />
+    case 'key':
+      return <Item reward={reward} handleTake={() => gameState.takeItem(key)} />
+    case 'health':
+      return <HealthItem reward={reward} handleTake={() => gameState.takeItem(key)} />
+    case 'hidden':
+      gameState.takeHiddenItem(key)
+      return <noscript />
+    default:
+      return <noscript />
+  }
+}
 
 class App extends Component {
   constructor({ content, session }){
@@ -97,6 +114,7 @@ class App extends Component {
     return (
       <BattleScreen
         player={player}
+        session={this.props.session}
         challenge={challenge}
         onWin={this.playerWin}
         onLose={this.restart}
@@ -110,7 +128,7 @@ class App extends Component {
 
   }
   renderRewards(){
-    const { sectionMeta } = this.state
+    const { sectionMeta, game } = this.state
     const { gameState } = this.props.session
     const keys = Object.keys(sectionMeta.rewards)
     if(!keys.length && !sectionMeta.hasHealthRecovery){
@@ -125,19 +143,12 @@ class App extends Component {
     return recovery.concat(keys.map(key => {
       const reward = sectionMeta.rewards[key]
       if (reward.obtained) return <noscript />
-      switch (reward.type) {
-        case 'weapon':
-          return <Weapon reward={reward} handleTake={() => gameState.takeItem(key)} />
-        case 'armor':
-          return <Armor reward={reward} handleTake={() => gameState.takeItem(key)} />
-        case 'key':
-          return <Item reward={reward} handleTake={() => gameState.takeItem(key)} />
-        case 'hidden':
-          gameState.takeHiddenItem(key)
-          return <noscript />
-        default:
-          return <noscript />
+      if (reward.type === 'drop') {
+        const possibleRewards = game.drops[reward.name]
+        const randomReward = possibleRewards[ rndDown(possibleRewards.length) ]
+        return rewardComponent(randomReward, gameState, key)
       }
+      return rewardComponent(reward, gameState, key)
     }))
   }
   renderOptions(options) {
@@ -198,14 +209,14 @@ class App extends Component {
     const { game, currentSection, sectionMeta, player } = this.state
     const { text, options } = currentSection
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
-    const showItems = !hasBattle && player.items.length
+    const showItems = !!player.items.length
     return (
       <div>
       <Panel spaceBottom>
         { hasBattle ? this.renderBattle() : this.renderChoice()}
       </Panel>
-      { player.health && <Player player={player} gameState={this.props.session.gameState}/> }
-      { showItems ? <PlayerItems player={player} /> : <noscript /> }
+      { player.health && <Player player={player} gameState={this.props.session.gameState} /> }
+      { showItems ? <PlayerItems player={player} gameState={this.props.session.gameState} /> : <noscript /> }
       </div>
     );
   }

@@ -48,7 +48,7 @@ class GameState {
       this.player.weapons.push(reward)
     } else if(reward.type === 'armor'){
       this.player.armor = reward
-    } else if(reward.type === 'key'){
+    } else if(['key','health'].indexOf(reward.type) !== -1){
       this.player.items.push(reward)
     }
     this.session.update()
@@ -61,6 +61,12 @@ class GameState {
   recoverHealth(){
     this.player.currentHealth = this.player.health
     this.session.update()
+  }
+  consumeHealthItem(item){
+    const { player } = this;
+    player.currentHealth = Math.min(player.health, player.currentHealth + item.recovery);
+    this.usePlayerItem(item.name)
+    this.session.update();
   }
   playerHasItem(name){
     const matches = this.player.items.filter(item => item.name === name)

@@ -10,8 +10,8 @@ const didHit = (attack, defense) => {
   const baseLine = 10
   const difference = attack - defense
   const strikeNumber = baseLine - difference
-  const hitOne = rndDown(20)
-  const hitTwo = rndDown(20)
+  const hitOne = rndDown(21)
+  const hitTwo = rndDown(21)
   return hitOne > strikeNumber || hitTwo > strikeNumber
 }
 

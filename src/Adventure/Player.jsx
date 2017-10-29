@@ -1,5 +1,5 @@
 import React from 'react'
-import { Panel, Label, Value, HighlightLabel, Button } from '../components/index.jsx'
+import { Panel, Label, Value, HighlightLabel, Button, colors } from '../components/index.jsx'
 import styled from 'styled-components'
 
 const Frame = styled.div`
@@ -12,18 +12,43 @@ const Frame = styled.div`
   margin: 5px;
 `
 
+const ClickFrame = Frame.extend`
+  cursor: pointer;
+`
+
+const HealthButton = styled.div`
+  background-color: ${colors['dark-green']};
+  color: white;
+  font-size: 10px;
+  padding: 3px;
+  margin-left: 4px;
+  border-radius: 10px;
+  display: inline-block;
+`
+
 const equip = (idx, gameState) => {
   gameState.equip(idx)
 }
 
-export const PlayerItems = ({ player }) => (
+export const PlayerItems = ({ player, gameState }) => (
   <Panel>
     {
-      player.items.map(item => (
-        <Frame>
-            <Value>{item.name}</Value>
-        </Frame>
-      ))
+      player.items.map(item => {
+        if(item.type === 'health'){
+          return (
+            <ClickFrame onClick={() => gameState.consumeHealthItem(item) }>
+              <Value>{item.name}</Value>
+              <HealthButton>{`+ ${item.recovery}`}</HealthButton>
+            </ClickFrame>
+          )
+        } else {
+          return (
+            <Frame>
+              <Value>{item.name}</Value>
+            </Frame>
+          )
+        }
+      })
     }
   </Panel>
 )

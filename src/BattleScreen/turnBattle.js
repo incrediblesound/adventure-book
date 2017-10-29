@@ -135,16 +135,17 @@ export default class BattleScreen extends Component {
       battleLog: `${battleLog}${text}`
     }, this.nextTurn)
   }
+  playerUseRecovery = (amount) => {
+    const text = `${player.name} recovers health by ${amount}`;
+  }
   challengeStrike(){
     const { challenge, player, battleLog, challengeSpeed, playerSpeed } = this.state
     let newLog = battleLog
-    if (battleLog.split('\n').length > 5){
-      newLog = ''
-    }
+    if (battleLog.split('\n').length > 5) newLog = ''
+
     const { hit, damage } = challengeStrike(player, challenge)
-    if (hit) {
-      player.currentHealth -= damage
-    }
+    if (hit) player.currentHealth -= damage
+
     const text = hit
       ? `${challenge.name} strikes ${player.name} for ${damage} damage\n`
       : `${challenge.name} attacks and misses\n`
@@ -157,9 +158,10 @@ export default class BattleScreen extends Component {
     }, this.nextTurn)
   }
   nextTurn = () => {
-    const { isPlayersTurn, battleLog, challenge } = this.state
+    const { isPlayersTurn, battleLog, challenge, finished } = this.state
     this.checkGameConditions()
-    if (!isPlayersTurn) {
+    this.props.session.update()
+    if (!isPlayersTurn && !finished) {
       setTimeout(() => {
         this.challengeStrike()
       }, 1000)

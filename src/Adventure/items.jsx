@@ -50,3 +50,12 @@ export const Item = ({ reward, handleTake }) => {
     </ItemPanel>
   )
 }
+
+export const HealthItem = ({ reward, handleTake }) => {
+  return (
+    <ItemPanel>
+    <InlineHeader>{`${reward.name} (Health +${reward.recovery})`}</InlineHeader>
+    <Button spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    </ItemPanel>
+  )
+}
