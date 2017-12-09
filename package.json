@@ -33,6 +33,7 @@
     "axios": "^0.16.2",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
+    "express": "^4.16.2",
     "express-session": "^1.15.5",
     "loglevel": "^1.4.1",
     "mongoose": "^4.11.3",
