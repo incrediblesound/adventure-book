@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { StoryBox, Category, Button } from '../components/index.jsx'
+import { StoryBox, Category, Button, TextLink } from '../components/index.jsx'
 
 const StoryContainer = styled.div`
   font-size: 14px;
@@ -33,9 +33,8 @@ export default class Browse extends Component {
           <a href={`#view/${_id}`} key={`${title}-${i}`}>
             {title || 'error'}
           </a>
-          <span> - by {author}</span>
-          <Category>{story.category}</Category>
-          <Button color="blue" spaceLeft onClick={() => this.setAuthor(author)}>adventures by {author}</Button>
+          <span> - by author <TextLink onClick={() => this.setAuthor(author)}>{author}</TextLink></span>
+          <Category>{` ${story.category} `}</Category>
           <p>{story.description || 'NO DESCRIPTION'}</p>
         </StoryBox>
       )

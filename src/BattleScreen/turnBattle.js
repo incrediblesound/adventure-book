@@ -37,7 +37,7 @@ const Log = styled.pre`
   border: solid 1px #999;
   border-radius: 5px;
   margin: 0px;
-  background-color: #eee;
+  background-color: #fcfcfc;
   padding: 3px;
   height: 95%;
   width: 50%;
@@ -209,10 +209,10 @@ export default class BattleScreen extends Component {
         <FlexColumn height='100%'>
           <FlexRow height='50%'>
             <Player player={player} />
-            <Challenge challenge={challenge} />
+            <Log>{battleLog}</Log>
           </FlexRow>
           <FlexRow height='50%'>
-            <Log>{battleLog}</Log>
+            <Challenge challenge={challenge} />
             <BattlePanel>
             <FlexColumn>
               <Label margin="3px 0px">{player.name} Attack bonus: <Value>{playerAttackNumber}</Value></Label>

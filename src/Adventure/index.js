@@ -3,7 +3,7 @@ import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/turnBattle.js'
 import { Weapon, Armor, Item, Recovery, HealthItem } from './items.jsx'
-import { Panel, Button, colors, FlexRow } from '../components/index.jsx'
+import { Panel, Button, colors, FlexRow, ErrorText } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
 import { rndDown } from '../utilities.js'
 
@@ -35,6 +35,13 @@ const Continue = styled.a`
   cursor: pointer;
   font-size: 18px;
 `
+
+const ErrorScreen = () => (
+  <Panel>
+    <ErrorText>This story has errors and can not be loaded</ErrorText>
+  </Panel>
+)
+
 const rewardComponent = (reward, gameState, key) => {
   switch (reward.type) {
     case 'weapon':
@@ -57,16 +64,20 @@ class App extends Component {
   constructor({ content, session }){
     super()
     const game = parser(content).result
-    const section = game.pages.filter(section => section.id === 0)[0]
-    session.startStory(game)
+    let section = null;
+
+    if (game) {
+      section = game.pages.filter(section => section.id === 0)[0]
+      session.startStory(game)
+    }
 
     this.state = {
       game,
       textIndex: 0,
       currentSectionId: 0,
       currentSection: section,
-      player: session.gameState.player,
-      sectionMeta: session.gameState.getMetaForSection(section),
+      player: game && session.gameState.player,
+      sectionMeta: game && session.gameState.getMetaForSection(section),
     }
   }
   unlockOption = (option) => {
@@ -207,6 +218,7 @@ class App extends Component {
   }
   render() {
     const { game, currentSection, sectionMeta, player } = this.state
+    if (!game) return <ErrorScreen />
     const { text, options } = currentSection
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
     const showItems = !!player.items.length

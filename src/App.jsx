@@ -13,7 +13,8 @@ import Examples from './Examples/index.jsx'
 import About from './About/index.jsx'
 
 const Backing = styled.div`
-  background-color: lightsteelblue;
+  background-image: url('paper.jpg');
+  background-repeat: repeat;
   position: absolute;
   top: 0;
   bottom: 0;

@@ -8,13 +8,28 @@ export const colors = {
   'light-gray': '#DDD',
   'dark-gray': '#999',
   'dark-yellow': '#FFDC00',
-  'light-yellow': '#fcf8ab'
+  'light-yellow': '#fcf8ab',
+  'red': '#FF4136',
 }
 
 const btnSizes = {
   'medium': '5px 10px',
   'large': '5px 25px;',
 }
+
+export const ErrorText = styled.p`
+  font-size: 16px;
+  line-height: 1.2;
+  color: ${colors['red']};
+`;
+
+export const TextLink = styled.span`
+  cursor: pointer;
+  color: #0074D9;
+  &:hover {
+    color: #7FDBFF;
+  }
+`
 
 export const Panel = styled.div`
   position: relative;
@@ -26,7 +41,7 @@ export const Panel = styled.div`
   ${ props => props.spaceLeft ? 'margin-left: 10px;' : '' }
   ${ props => props.spaceBottom ? 'margin-bottom: 10px;' : '' }
   ${ props => props.spaceRight ? 'margin-right: 10px;' : '' }
-  border: 3px solid #ccc;
+  border: 2px solid #ccc;
   border-radius: 3px;
   padding: 10px;
   flex-direction: ${ props => props.direction || 'row' }
@@ -123,7 +138,7 @@ export const StoryBox = styled.div`
 
 export const Category = styled.div`
   display: inline-block;
-  padding: 0px 4px;
+  padding: 0px 5px;
   border-radius: 3px;
   margin-left: 5px;
   background-color: ${colors['light-gray']};
