@@ -1,28 +1,15 @@
 import { deepCopy } from '../utilities'
 
 class GameState {
-  constructor(story, session){
-    this.id = `${story.author}/${story.title}`
-    if (story.player) {
-      this.player = deepCopy(story.player)
+  constructor(gameData, game, session){
+    this.id = `${gameData.author}/${gameData.title}`
+
+    if (game.player) {
+      this.player = deepCopy(game.player)
       this.player.items = []
       this.player.hiddenItems = []
-      this.player.weapons = []
-      this.player.currentHealth = story.player.health
+      this.player.currentHealth = game.player.health
       this.player.currentWeapon = 0
-      story.player.items.forEach(item => {
-        switch(item.type){
-          case 'weapon':
-            this.player.weapons.push(item)
-            break;
-          case 'armor':
-            this.player.armor = item
-            break;
-          case 'key':
-            this.player.items.push(item)
-            break;
-        }
-      })
     } else {
       this.player = {
         items: [],
@@ -98,7 +85,7 @@ class GameState {
       return this.sectionMeta[section.id]
     } else {
       let meta = {
-        hasChallenge: !!section.challenge,
+        hasChallenge: !!section.challenges.length,
         challengePassed: false,
         rewards: {},
         options: {},

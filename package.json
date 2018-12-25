@@ -26,7 +26,10 @@
     "node-sass": "^4.5.2",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
-    "webpack": "^2.7.0",
+    "ts-loader": "^5.3.2",
+    "typescript": "^3.2.2",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^2.6.0"
   },
   "dependencies": {
@@ -39,7 +42,7 @@
     "mongoose": "^4.11.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "story-parser": "^1.1.2",
+    "story-parser": "file:../story-parser",
     "styled-components": "^2.1.1"
   },
   "main": "server.js"

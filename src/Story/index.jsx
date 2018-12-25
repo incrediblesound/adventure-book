@@ -32,8 +32,8 @@ class Story extends Component {
       // })
   }
   renderStory(){
-    const { session, navigate } = this.props
-    const { author, title, content } = this.state.gameData
+    const { session } = this.props
+    const { author, title } = this.state.gameData
 
     return (
       <div>
@@ -41,7 +41,7 @@ class Story extends Component {
         <span style={{ fontSize: '12px', fontWeight: '700' }}>{` by ${author}`}</span>
         <Adventure
           session={session}
-          content={content}
+          gameData={this.state.gameData}
         />
       </div>
     )

@@ -64,10 +64,16 @@ export default class Create extends Component {
   }
   submit = () => {
     const { text, title, category, description, id } = this.state
-    const { result, error } = parser(this.state.text)
-    const storyError = result && validate(result)
-    if (error || storyError) {
-      this.setState({ error: error || storyError })
+    let content = text
+    const parserResult = parser(this.state.text)
+    const storyError = parserResult.result && validate(result)
+    if (parserResult.error || storyError) {
+      if (parserResult.error) {
+        let first = text.substring(0, content.length - parserResult.text.length)
+        let second = text.substring(content.length - parserResult.text.length)
+        content = first + '>---{{ ERROR }}---->' + second
+      }
+      this.setState({ error: parserResult.error || storyError, text: content })
     } else if (!title) {
       this.setState({ error: 'You are required to provide a title for your adventure.' })
     } else if (!category) {

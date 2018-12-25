@@ -58,9 +58,18 @@ const Player = ({ player, gameState }) => (
       <Frame>
       <Label>Total Health: <Value>{'' + player.health}</Value></Label>
       <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
-      <Label>Armor: <Value>{player.armor.name}</Value></Label>
-      <Label>Defense: <Value>{`${player.defense + player.armor.defense}`}</Value></Label>
+      <Label>Defense: <Value>{'' + player.defense}</Value></Label>
       </Frame>
+      {
+        player.armor.map(armor => {
+          return (
+            <Frame>
+              <Label>Armor: <Value>{armor.name}</Value></Label>
+              <Label>Defense: <Value>{`+${armor.defense}`}</Value></Label>
+            </Frame>
+          )
+        })
+      }
       {
         player.weapons.map((weapon, idx) => {
           const inUse = player.currentWeapon === idx

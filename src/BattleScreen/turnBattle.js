@@ -62,8 +62,16 @@ const Player = ({ player, playerStrike }) => (
     <div><Label>Life: <Value>{player.currentHealth}</Value></Label></div>
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Damage: <Value>{player.weapons[player.currentWeapon].damage}</Value></Label>
-    <Label>Armor: <Value>{player.armor.name}</Value></Label>
-    <Label>Defense: <Value>{`${player.defense + player.armor.defense}`}</Value></Label>
+    {
+      player.armor.map(armor => {
+        return (
+          <div>
+            <Label>Armor: <Value>{armor.name}</Value></Label>
+            <Label>Defense: <Value>{`+${armor.defense}`}</Value></Label>
+          </div>
+        )
+      })
+    }
   </ClearPanel>
 )
 
@@ -72,8 +80,8 @@ const Challenge = ({ challenge }) => (
     <div><Label size="large">{challenge.name}</Label></div>
     <div><Label>Life: <Value>{challenge.currentHealth}</Value></Label></div>
     <Label>Defense: <Value>{challenge.defense}</Value></Label>
-    <Label>Weapon: <Value>{challenge.weapon}</Value></Label>
-    <Label>Damage: <Value>{challenge.damage}</Value></Label>
+    <Label>Weapon: <Value>{challenge.weapon.name}</Value></Label>
+    <Label>Damage: <Value>{challenge.weapon.damage}</Value></Label>
   </ClearPanel>
 )
 
@@ -178,7 +186,8 @@ export default class BattleScreen extends Component {
       started,
      } = this.state
     const playerAttackNumber = player.attack - challenge.defense
-    const challengeAttackNumber = challenge.attack - (player.defense + player.armor.defense)
+    const playerArmorTotal = player.armor.reduce((acc, curr) => acc + curr.defense, 0)
+    const challengeAttackNumber = challenge.attack - (player.defense + playerArmorTotal)
     if(!started) {
       return (
         <Wrapper>

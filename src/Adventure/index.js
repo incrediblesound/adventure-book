@@ -61,14 +61,14 @@ const rewardComponent = (reward, gameState, key) => {
 }
 
 class App extends Component {
-  constructor({ content, session }){
+  constructor({ gameData, session }){
     super()
-    const game = parser(content).result
+    const game = parser(gameData.content)
     let section = null;
 
     if (game) {
       section = game.pages.filter(section => section.id === 0)[0]
-      session.startStory(game)
+      session.startStory(gameData, game)
     }
 
     this.state = {
@@ -121,7 +121,8 @@ class App extends Component {
   }
   renderBattle(){
     const { player, currentSection } = this.state
-    const { text, challenge } = currentSection
+    const { text, challenges } = currentSection
+    const challenge = challenges[0] // for now only supporting one opponent
     return (
       <BattleScreen
         player={player}
@@ -151,7 +152,7 @@ class App extends Component {
         <Recovery handleClick={this.recoverHealth} />
       )
     }
-    return recovery.concat(keys.map(key => {
+    const rewards = recovery.concat(keys.map(key => {
       const reward = sectionMeta.rewards[key]
       if (reward.obtained) return <noscript />
       if (reward.type === 'drop') {
@@ -161,6 +162,8 @@ class App extends Component {
       }
       return rewardComponent(reward, gameState, key)
     }))
+    
+    return rewards
   }
   renderOptions(options) {
     const { gameState } = this.props.session

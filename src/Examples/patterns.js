@@ -18,7 +18,6 @@ PLAYER "hero"
 HEALTH 20 ATTACK 3 DEFENSE 4
 ITEM TYPE "weapon" NAME "sword" DAMAGE 3 SPEED 4
 ITEM TYPE "armor" NAME "leather" DEFENSE 1
-----------------------------
 
 PAGE 0
 "The enemy dropped a weapon."
@@ -31,7 +30,6 @@ WEAPON "dagger" DAMAGE 2
 ITEM TYPE "drop" NAME "weapons"
 
 (end)
---------------------------------------
     `}</pre></Example>
 
 export const drop = () => <Example><pre>{`

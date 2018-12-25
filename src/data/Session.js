@@ -75,7 +75,7 @@ export default class Session {
     })
   }
   /* GAME STATE */
-  startStory(story){
-    this.gameState = new GameState(story, this)
+  startStory(gameData, game){
+    this.gameState = new GameState(gameData, game, this)
   }
 }

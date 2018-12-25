@@ -1,5 +1,4 @@
 const { User } = require('../models/models.js')
-const emailRegex = /.{1,}\@.{1,}/
 
 module.exports = app => {
 
@@ -26,9 +25,6 @@ module.exports = app => {
 
   app.post('/api/signup', (req, res) => {
     const { username, password, email } = req.body
-    if(!emailRegex.test(email)){
-      res.send({ success: false, reason: 'Invalid email' })
-    }
     User.findOne({ username }).then(result => {
       if(result !== null){
         res.send({ success: false, reason: 'user already exists' })

@@ -10,7 +10,12 @@ module.exports = {
     publicPath: '/build/'
   },
   module: {
-    loaders: [
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.es6\.js$|\.js$|\.jsx$/,
         exclude: /node_modules/,
