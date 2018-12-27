@@ -31,7 +31,8 @@ export default class Browse extends Component {
       return (
         <StoryBox>
           <a href={`#view/${_id}`} key={`${title}-${i}`}>
-            {title || 'error'}
+            <span className="icon">&#9654;</span>
+            {` ${title} `}
           </a>
           <span> - by author <TextLink onClick={() => this.setAuthor(author)}>{author}</TextLink></span>
           <Category>{` ${story.category} `}</Category>

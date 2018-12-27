@@ -134,6 +134,10 @@ export const StoryBox = styled.div`
   p {
     font-weight: 100;
   }
+  .icon {
+    color: ${colors['light-green']};
+    margin: 0px 4px;
+  }
 `
 
 export const Category = styled.div`
