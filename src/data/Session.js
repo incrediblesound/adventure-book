@@ -1,5 +1,5 @@
 import axios from 'axios'
-import GameState from './GameState'
+import GameState from './GameState.ts'
 
 export default class Session {
   constructor(){

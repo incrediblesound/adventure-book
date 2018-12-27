@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/turnBattle.js'
-import { Weapon, Armor, Item, Recovery, HealthItem } from './items.jsx'
+import { Weapon, Armor, Item, Recovery, HealthItem, Currency } from './items.jsx'
 import { Panel, Button, colors, FlexRow, ErrorText } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
 import { rndDown } from '../utilities.js'
@@ -43,15 +43,24 @@ const ErrorScreen = () => (
 )
 
 const rewardComponent = (reward, gameState, key) => {
+  let canAfford = true
+  if (reward.cost) {
+    const playersMoney = gameState.player.currency.filter(currency => currency.name === reward.cost.name).pop()
+    if (!playersMoney || playersMoney.amount < reward.cost.amount) {
+      canAfford = false
+    }
+  }
   switch (reward.type) {
+    case 'currency':
+      return <Currency reward={reward} handleTake={() => gameState.takeItem(key)} />
     case 'weapon':
-      return <Weapon reward={reward} handleTake={() => gameState.takeItem(key)} />
+      return <Weapon reward={reward} canAfford={canAfford} handleTake={() => gameState.takeItem(key)} />
     case 'armor':
-      return <Armor reward={reward} handleTake={() => gameState.takeItem(key)} />
+      return <Armor reward={reward} canAfford={canAfford} handleTake={() => gameState.takeItem(key)} />
     case 'key':
-      return <Item reward={reward} handleTake={() => gameState.takeItem(key)} />
+      return <Item reward={reward} canAfford={canAfford} handleTake={() => gameState.takeItem(key)} />
     case 'health':
-      return <HealthItem reward={reward} handleTake={() => gameState.takeItem(key)} />
+      return <HealthItem reward={reward} canAfford={canAfford} handleTake={() => gameState.takeItem(key)} />
     case 'hidden':
       gameState.takeHiddenItem(key)
       return <noscript />
@@ -155,11 +164,11 @@ class App extends Component {
     const rewards = recovery.concat(keys.map(key => {
       const reward = sectionMeta.rewards[key]
       if (reward.obtained) return <noscript />
-      if (reward.type === 'drop') {
-        const possibleRewards = game.drops[reward.name]
-        const randomReward = possibleRewards[ rndDown(possibleRewards.length) ]
-        return rewardComponent(randomReward, gameState, key)
-      }
+      // if (reward.type === 'drop') {
+      //   const possibleRewards = game.drops[reward.name]
+      //   const randomReward = possibleRewards[ rndDown(possibleRewards.length) ]
+      //   return rewardComponent(randomReward, gameState, key)
+      // }
       return rewardComponent(reward, gameState, key)
     }))
     

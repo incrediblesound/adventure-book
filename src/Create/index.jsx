@@ -63,31 +63,31 @@ export default class Create extends Component {
   submit = () => {
     const { text, title, category, description } = this.state
     let content = text
-    const parserResult = parser(this.state.text)
-    const storyError = parserResult.result && validate(result)
-    if (parserResult.error || storyError) {
-      if (parserResult.error) {
-        let first = text.substring(0, content.length - parserResult.text.length)
-        let second = text.substring(content.length - parserResult.text.length)
-        content = first + '>---{{ ERROR }}---->' + second
-      }
-      this.setState({ error: error || storyError, text: content })
-    } else if (!title) {
-      this.setState({ error: 'You are required to provide a title for your adventure.' })
-    } else if (!category) {
-      this.setState({ error: 'You must chose a category for your adventure.'})
-    } else {
-      this.props.session.saveStory({ content, title, category, description })
-        .then(response => {
-          const { data } = response
-          if(!data.success){
-            const errorMsg = typeof data.reason === 'string' ? data.reason : data.reason.errors.category.message
-            this.setState({ error: errorMsg })
-          } else {
-            this.props.navigate('profile')
-          }
-        })
-    }
+    // const parserResult = parser(this.state.text)
+    // const storyError = parserResult.result && validate(result)
+    // if (parserResult.error || storyError) {
+    //   if (parserResult.error) {
+    //     let first = text.substring(0, content.length - parserResult.text.length)
+    //     let second = text.substring(content.length - parserResult.text.length)
+    //     content = first + '>---{{ ERROR }}---->' + second
+    //   }
+    //   this.setState({ error: error || storyError, text: content })
+    // } else if (!title) {
+    //   this.setState({ error: 'You are required to provide a title for your adventure.' })
+    // } else if (!category) {
+    //   this.setState({ error: 'You must chose a category for your adventure.'})
+    // } else {
+    this.props.session.saveStory({ content, title, category, description })
+      .then(response => {
+        const { data } = response
+        if(!data.success){
+          const errorMsg = typeof data.reason === 'string' ? data.reason : data.reason.errors.category.message
+          this.setState({ error: errorMsg })
+        } else {
+          this.props.navigate('profile')
+        }
+      })
+    // }
   }
   renderCategories(){
     return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (

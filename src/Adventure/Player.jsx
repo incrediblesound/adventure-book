@@ -59,6 +59,13 @@ const Player = ({ player, gameState }) => (
       <Label>Total Health: <Value>{'' + player.health}</Value></Label>
       <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
       <Label>Defense: <Value>{'' + player.defense}</Value></Label>
+      {
+        player.currency.map(currency => {
+          return (
+          <Label>{`${currency.name}: `}<Value>{currency.amount}</Value></Label>
+          )
+        })
+      }
       </Frame>
       {
         player.armor.map(armor => {

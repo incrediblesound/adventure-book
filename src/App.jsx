@@ -27,7 +27,6 @@ const Container = styled.div`
   overflow-x: scroll;
   padding: 7px 40px;
   border-radius: 5px;
-  box-shadow: 0px 1px 1px 1px #999;
   margin: 0px auto;
   position: absolute;
   top: 45px;
@@ -57,7 +56,7 @@ class App extends Component {
     const { session, navigate } = this.props
 
     return (
-      <Backing>
+      <div>
         { page !== 'login' && <Header session={session} navigate={navigate} page={page} /> }
         <Container>
           <Component
@@ -67,7 +66,7 @@ class App extends Component {
             page={page}
           />
         </Container>
-      </Backing>
+      </div>
     )
   }
 }
