@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Value, InlineHeader, Label, Button } from '../components/index.jsx'
+import { Value, InlineHeader, Button } from '../components/index.jsx'
 
 const ItemPanel = styled.div`
   display: flex;
