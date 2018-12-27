@@ -5,6 +5,8 @@ import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from '../Create/constants.js'
 import * as templates from '../Create/templates'
 import validate, { getLastPage} from '../Create/validateStory'
+import { Panels, TemplatePanel } from '../Create/index.jsx'
+import { Example } from '../Examples/index.jsx'
 
 const InputGroup = styled.div`
   margin: 5px;
@@ -119,43 +121,57 @@ export default class Create extends Component {
     const { error, title, text, description } = this.state
 
     return (
-      <div>
-      <InputGroup>
-        { this.renderCategories() }
-      </InputGroup>
+      <Panels>
+        <div>
         <InputGroup>
-          <Title
-            value={title}
-            placeholder="TITLE"
-            onChange={(e) => this.setState({ title: e.target.value })}
-          />
+          { this.renderCategories() }
         </InputGroup>
-        <InputGroup>
-          <Story
-            rows={3}
-            cols={50}
-            value={description}
-            placeholder="DESCRIPTION"
-            onChange={(e) => this.setState({ description: e.target.value })}
-          />
-        </InputGroup>
-        <InputGroup>
-          <Story
-            rows={30}
-            cols={50}
-            value={text}
-            placeholder="STORY"
-            onChange={(e) => this.setState({ text: e.target.value })}
-          />
-        </InputGroup>
-        <Error>{error || ''}</Error>
-        <Button spaceRight color="green" size="large" onClick={this.submit}>Save</Button>
-        <Button color="gray" title="Player information must be first in your story" spaceLeft onClick={() => this.addTemplate('player')}>+ Player</Button>
-        <Button color="gray" title="A simple page" spaceLeft onClick={() => this.addTemplate('page')}>+ Page</Button>
-        <Button color="gray" title="A page with an item" spaceLeft onClick={() => this.addTemplate('item')}>+ Page w/ Item</Button>
-        <Button color="gray" title="A page with combat" spaceLeft onClick={() => this.addTemplate('challenge')}>+ Page w/ Challenge</Button>
-        <Button color="gray" title="A page with combat and rewards" spaceLeft onClick={() => this.addTemplate('rewards')}>+ Challenge & Reward</Button>
-      </div>
+          <InputGroup>
+            <Title
+              value={title}
+              placeholder="TITLE"
+              onChange={(e) => this.setState({ title: e.target.value })}
+            />
+          </InputGroup>
+          <InputGroup>
+            <Story
+              rows={3}
+              cols={50}
+              value={description}
+              placeholder="DESCRIPTION"
+              onChange={(e) => this.setState({ description: e.target.value })}
+            />
+          </InputGroup>
+          <InputGroup>
+            <Story
+              rows={30}
+              cols={50}
+              value={text}
+              placeholder="STORY"
+              onChange={(e) => this.setState({ text: e.target.value })}
+            />
+          </InputGroup>
+          <Error>{error || ''}</Error>
+          <Button spaceRight color="green" size="large" onClick={this.submit}>Save</Button>
+          <Button color="gray" title="Player information must be first in your story" spaceLeft onClick={() => this.addTemplate('player')}>+ Player</Button>
+          <Button color="gray" title="A simple page" spaceLeft onClick={() => this.addTemplate('page')}>+ Page</Button>
+          <Button color="gray" title="A page with an item" spaceLeft onClick={() => this.addTemplate('item')}>+ Page w/ Item</Button>
+          <Button color="gray" title="A page with combat" spaceLeft onClick={() => this.addTemplate('challenge')}>+ Page w/ Challenge</Button>
+          <Button color="gray" title="A page with combat and rewards" spaceLeft onClick={() => this.addTemplate('rewards')}>+ Challenge & Reward</Button>
+        </div>
+        <TemplatePanel>
+          {
+            Object.keys(templates).map(key => {
+              let template = templates[key]
+              return (
+                <Example>
+                  <pre>{ template(1) }</pre>
+                </Example>
+              )
+            })
+          }
+        </TemplatePanel>
+      </Panels>
     )
   }
 }

@@ -6,7 +6,7 @@ import { Value, InlineHeader, Label, Button } from '../components/index.jsx'
 const ItemPanel = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 150px;
   border: solid 2px #DDD;
   border-radius: 5px;
@@ -22,6 +22,9 @@ export const Recovery = ({ handleClick }) => (
 )
 
 export const Armor = ({ reward, handleTake, canAfford }) => {
+  const verb = reward.cost
+    ? 'Buy'
+    : 'Take'
   return (
     <ItemPanel>
     <InlineHeader>{reward.name}</InlineHeader>
@@ -30,12 +33,15 @@ export const Armor = ({ reward, handleTake, canAfford }) => {
       ? <Value>{` Cost: ${reward.cost.name} ${reward.cost.amount} `}</Value>
       : null
     }
-    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>{ verb }</Button>
     </ItemPanel>
   )
 }
 
 export const Weapon = ({ reward, handleTake, canAfford }) => {
+  const verb = reward.cost
+    ? 'Buy'
+    : 'Take'
   return (
     <ItemPanel>
     <InlineHeader>{reward.name}</InlineHeader>
@@ -45,21 +51,27 @@ export const Weapon = ({ reward, handleTake, canAfford }) => {
       ? <Value>{` Cost: ${reward.cost.name} ${reward.cost.amount} `}</Value>
       : null
     }
-    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>{ verb }</Button>
     </ItemPanel>
   )
 }
 
 export const Item = ({ reward, handleTake, canAfford }) => {
+  const verb = reward.cost
+    ? 'Buy'
+    : 'Take'
   return (
     <ItemPanel>
     <InlineHeader>{reward.name}</InlineHeader>
-    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>{ verb }</Button>
     </ItemPanel>
   )
 }
 
 export const HealthItem = ({ reward, handleTake, canAfford }) => {
+  const verb = reward.cost
+    ? 'Buy'
+    : 'Take'
   return (
     <ItemPanel>
     <InlineHeader>{`${reward.name} (Health +${reward.recovery})`}</InlineHeader>
@@ -67,7 +79,7 @@ export const HealthItem = ({ reward, handleTake, canAfford }) => {
       ? <Value>{` Cost: ${reward.cost.name} ${reward.cost.amount} `}</Value>
       : null
     }
-    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>Take</Button>
+    <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>{ verb }</Button>
     </ItemPanel>
   )
 }

@@ -5,6 +5,20 @@ import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
 import { categories } from './constants.js'
 import * as templates from './templates'
 import validate, { getLastPage} from './validateStory'
+import { Example } from '../Examples/index.jsx'
+
+export const Panels = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+
+export const TemplatePanel = styled.div`
+  margin-left: 30px;
+  margin-top: 10px;
+  padding: 5px;
+  height: 500px;
+  overflow-x: scroll;
+`
 
 
 const InputGroup = styled.div`
@@ -106,44 +120,58 @@ export default class Create extends Component {
     const { navigate } = this.props
     const dirty = !!(title || text || description)
     return (
-      <div>
-        <InputGroup>
-          { this.renderCategories() }
-        </InputGroup>
-        <InputGroup>
-          <Title
-            value={title}
-            placeholder="TITLE"
-            onChange={(e) => this.setState({ title: e.target.value })}
-          />
-        </InputGroup>
-        <InputGroup>
-          <Story
-            rows={1}
-            cols={50}
-            value={description}
-            placeholder="DESCRIPTION"
-            onChange={(e) => this.setState({ description: e.target.value })}
-          />
-        </InputGroup>
-        <InputGroup>
-          <Story
-            rows={30}
-            cols={50}
-            value={text}
-            placeholder={storyMessage}
-            onChange={(e) => this.setState({ text: e.target.value })}
-          />
-        </InputGroup>
-        <Error>{error || ''}</Error>
-        <Button spaceRight color="green" size="large" onClick={this.submit}>Save</Button>
-        <Button color="blue" size="medium" onClick={() => navigate('examples', dirty)}>Learn from Examples</Button>
-        <Button color="gray" title="Player information must be first in your story" spaceLeft onClick={() => this.addTemplate('player')}>+ Player</Button>
-        <Button color="gray" title="A simple page" spaceLeft onClick={() => this.addTemplate('page')}>+ Page</Button>
-        <Button color="gray" title="A page with an item" spaceLeft onClick={() => this.addTemplate('item')}>+ Page w/ Item</Button>
-        <Button color="gray" title="A page with combat" spaceLeft onClick={() => this.addTemplate('challenge')}>+ Page w/ Challenge</Button>
-        <Button color="gray" title="A page with combat and rewards" spaceLeft onClick={() => this.addTemplate('rewards')}>+ Challenge & Reward</Button>
-      </div>
+      <Panels>
+        <div>
+          <InputGroup>
+            { this.renderCategories() }
+          </InputGroup>
+          <InputGroup>
+            <Title
+              value={title}
+              placeholder="TITLE"
+              onChange={(e) => this.setState({ title: e.target.value })}
+            />
+          </InputGroup>
+          <InputGroup>
+            <Story
+              rows={1}
+              cols={50}
+              value={description}
+              placeholder="DESCRIPTION"
+              onChange={(e) => this.setState({ description: e.target.value })}
+            />
+          </InputGroup>
+          <InputGroup>
+            <Story
+              rows={30}
+              cols={50}
+              value={text}
+              placeholder={storyMessage}
+              onChange={(e) => this.setState({ text: e.target.value })}
+            />
+          </InputGroup>
+          <Error>{error || ''}</Error>
+          <Button spaceRight color="green" size="large" onClick={this.submit}>Save</Button>
+          <Button color="blue" size="medium" onClick={() => navigate('examples', dirty)}>Learn from Examples</Button>
+          <Button color="gray" title="Player information must be first in your story" spaceLeft onClick={() => this.addTemplate('player')}>+ Player</Button>
+          <Button color="gray" title="A simple page" spaceLeft onClick={() => this.addTemplate('page')}>+ Page</Button>
+          <Button color="gray" title="A page with an item" spaceLeft onClick={() => this.addTemplate('item')}>+ Page w/ Item</Button>
+          <Button color="gray" title="A page with combat" spaceLeft onClick={() => this.addTemplate('challenge')}>+ Page w/ Challenge</Button>
+          <Button color="gray" title="A page with combat and rewards" spaceLeft onClick={() => this.addTemplate('rewards')}>+ Challenge & Reward</Button>
+        </div>
+        <TemplatePanel>
+          {
+            Object.keys(templates).map(key => {
+              let template = templates[key]
+              return (
+                <Example>
+                  <pre>{ template(1) }</pre>
+                </Example>
+              )
+            })
+          }
+        </TemplatePanel>
+      </Panels>
     )
   }
 }

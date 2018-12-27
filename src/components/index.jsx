@@ -59,7 +59,7 @@ export const Button = styled.button`
       ? colors[`dark-${props.color}`]
       : colors[`light-${props.color}`]
     };
-    color: white;
+    ${ props => props.disabled ? '' : 'color: white;' }
   }
   margin-top: ${ props => props.spaceTop ? '5px' : '0px' };
   margin-left: ${ props => props.spaceLeft ? '5px' : '0px' };

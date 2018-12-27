@@ -13,13 +13,12 @@ import Examples from './Examples/index.jsx'
 import About from './About/index.jsx'
 
 const Backing = styled.div`
-  background-image: url('paper.jpg');
-  background-repeat: repeat;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: #70e7ff;
 `
 
 const Container = styled.div`
@@ -29,9 +28,6 @@ const Container = styled.div`
   border-radius: 5px;
   margin: 0px auto;
   position: absolute;
-  top: 45px;
-  height: 90%;
-  width: 75%;
   left: 20px;
   right: 20px;
   font-family: 'Lato', sans-serif;
@@ -56,7 +52,7 @@ class App extends Component {
     const { session, navigate } = this.props
 
     return (
-      <div>
+      <Backing>
         { page !== 'login' && <Header session={session} navigate={navigate} page={page} /> }
         <Container>
           <Component
@@ -66,7 +62,7 @@ class App extends Component {
             page={page}
           />
         </Container>
-      </div>
+      </Backing>
     )
   }
 }
