@@ -177,7 +177,7 @@ class App extends Component {
   renderOptions(options) {
     const { gameState } = this.props.session
     const { sectionMeta } = this.state
-    if(options === 'END'){
+    if(sectionMeta.isEnd){
       return (
         <Button color="green" size="large" onClick={() => this.restart()}>Start Over</Button>
       )
