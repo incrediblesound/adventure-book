@@ -17,7 +17,7 @@ export const item = (n) => `
 PAGE ${n}
 "this place has a key."
 ITEM "key" NAME "key"
-OPTION ${n+1} "This option goes to page ${n+1}"
+OPTION ${n+1} "This option goes to page ${n+1}" LOCK "key"
 `
 
 export const challenge = (n) => `
