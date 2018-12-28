@@ -22,7 +22,7 @@ OPTION ${n+1} "This option goes to page ${n+1}" LOCK "key"
 
 export const challenge = (n) => `
 PAGE ${n}
-"There is an enemy in this room!"
+"There is an enemy in this room"
 
 CHALLENGE "enemy"
 HEALTH 5 SPEED 3 ATTACK 3 DEFENSE 4
