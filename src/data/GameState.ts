@@ -70,6 +70,7 @@ class GameState {
   takeHiddenItem(key: string){
     const section = this.sectionMeta[this.currentSection]
     const reward = section.rewards[key]
+    reward.obtained = true
     this.player.hiddenItems.push(reward)
   }
   recoverHealth(){
@@ -86,8 +87,8 @@ class GameState {
     const matches = this.player.items.filter((item: any) => item.name === name)
     return !!matches.length
   }
-  playerHasHiddenItem(name: any){
-    const matches = this.player.hiddenItems.filter((item: any) => item.name === name)
+  playerHasHiddenItem(item: any){
+    const matches = this.player.hiddenItems.filter((hidden: any) => hidden.name === item.name)
     return !!matches.length
   }
   usePlayerItem(name: string){

@@ -197,12 +197,16 @@ class App extends Component {
             <p>{`${option.text} (use ${option.lock})`}</p>
           </Choice>
         )
-      } else if (option.exclude && !gameState.playerHasHiddenItem(option.exclude)){
-        return (
-          <Choice onClick={() => this.handleGo(option.target)}>
-          <p>{`${option.text}`}</p>
-          </Choice>
-        )
+      } else if (option.exclude){
+        if (!gameState.playerHasHiddenItem(option.exclude)){
+          return (
+            <Choice onClick={() => this.handleGo(option.target)}>
+            <p>{`${option.text}`}</p>
+            </Choice>
+          )
+        } else {
+          return <noscript />
+        }
       } else if (!option.condition || (option.condition && gameState.playerHasHiddenItem(option.condition))) {
         return (
           <Choice onClick={() => this.handleGo(option.target)}>
