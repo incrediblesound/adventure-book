@@ -1,18 +1,15 @@
 import { rndUp, rndDown } from '../utilities.js'
 
-const calculateDamage = (attack) => {
-  const first = rndUp(attack)
-  const second = rndUp(attack)
-  return Math.max(first, second)
+const calculateDamage = (maxDamage) => {
+  return rndUp(maxDamage)
 }
 
 const didHit = (attack, defense) => {
   const baseLine = 10
   const difference = attack - defense
-  const strikeNumber = baseLine - difference
-  const hitOne = rndDown(21)
-  const hitTwo = rndDown(21)
-  return hitOne > strikeNumber || hitTwo > strikeNumber
+  const strikeThreshold = baseLine - difference
+  const hitNumber = rndDown(21)
+  return hitNumber > strikeThreshold
 }
 
 export const playerStrike = (player, challenge) => {
