@@ -31,7 +31,7 @@ export const challengeStrike = (player, challenge) => {
   }, 0)
   const playerDefense = player.defense + totalArmor
   if(didHit(challenge.attack, playerDefense)){
-    const damage = calculateDamage(challenge.damage)
+    const damage = calculateDamage(challenge.weapon.damage)
     return { hit: true, damage }
   } else {
     return { hit: false }
