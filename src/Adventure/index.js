@@ -12,7 +12,25 @@ const StoryText = styled.p`
   font-weight: 300;
   line-height: 1.5;
   font-family: 'Merriweather', serif;
+  padding: 0px 20px 0px 20px;
 `;
+
+const MainPanels = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  padding-bottom: 40px;
+`
+
+const PlayerInfo = styled.div`
+  position: relative;
+  display: flex;
+  height: auto;
+  width: auto;
+  margin: 0px 15px;
+  padding: 10px;
+  flex-direction: ${ props => props.direction || 'row' }
+`
 
 const Choice = styled.div`
   width: auto;
@@ -245,13 +263,15 @@ class App extends Component {
     const hasBattle = sectionMeta.hasChallenge && !sectionMeta.challengePassed
     const showItems = !!player.items.length
     return (
-      <div>
-      <Panel spaceBottom>
-        { hasBattle ? this.renderBattle() : this.renderChoice()}
-      </Panel>
-      { player.health && <Player player={player} gameState={this.props.session.gameState} /> }
-      { showItems ? <PlayerItems player={player} gameState={this.props.session.gameState} /> : <noscript /> }
-      </div>
+      <MainPanels>
+        <Panel spaceBottom>
+          { hasBattle ? this.renderBattle() : this.renderChoice()}
+        </Panel>
+        <PlayerInfo>
+          { player.health && <Player player={player} gameState={this.props.session.gameState} /> }
+          { showItems ? <PlayerItems player={player} gameState={this.props.session.gameState} /> : <noscript /> }
+        </PlayerInfo>
+      </MainPanels>
     );
   }
 }

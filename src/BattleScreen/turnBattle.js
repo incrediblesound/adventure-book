@@ -192,8 +192,8 @@ export default class BattleScreen extends Component {
       return (
         <Wrapper>
         <CenteredBox>
-          <h3>{ challenge.text }</h3>
           <Button color="gray" size="large" onClick={this.begin}>Start Battle</Button>
+          <h3>{ challenge.text }</h3>
         </CenteredBox>
       </Wrapper>
       )

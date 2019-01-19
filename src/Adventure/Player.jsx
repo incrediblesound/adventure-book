@@ -1,5 +1,5 @@
 import React from 'react'
-import { Panel, Label, Value, HighlightLabel, Button, colors } from '../components/index.jsx'
+import { Panel, Label, Value, HighlightLabel, Button, colors, FlexRow, FlexColumn } from '../components/index.jsx'
 import styled from 'styled-components'
 
 const Frame = styled.div`
@@ -55,47 +55,54 @@ export const PlayerItems = ({ player, gameState }) => (
 
 const Player = ({ player, gameState }) => (
     <Panel spaceBottom>
-      <Frame>
-      <Label>Total Health: <Value>{'' + player.health}</Value></Label>
-      <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
-      <Label>Defense: <Value>{'' + player.defense}</Value></Label>
-      {
-        player.currency.map(currency => {
-          return (
-          <Label>{`${currency.name}: `}<Value>{currency.amount}</Value></Label>
-          )
-        })
-      }
-      </Frame>
-      {
-        player.armor.map(armor => {
-          return (
-            <Frame>
-              <Label>Armor: <Value>{armor.name}</Value></Label>
-              <Label>Defense: <Value>{`+${armor.defense}`}</Value></Label>
-            </Frame>
-          )
-        })
-      }
-      {
-        player.weapons.map((weapon, idx) => {
-          const inUse = player.currentWeapon === idx
-          return (
-            <Frame>
-              <div>
-                <Value>{weapon.name}</Value>
-                <Label>Damage: <Value>{weapon.damage}</Value></Label>
-                <Label>Speed: <Value>{weapon.speed}</Value></Label>
-              </div>
-              {
-                inUse
-                  ? <HighlightLabel>Equipped</HighlightLabel>
-                  : <Button color="blue" onClick={() => equip(idx, gameState)}>EQUIP</Button>
-              }
-            </Frame>
-          )
-        })
-      }
+    <FlexColumn>
+      <FlexRow>
+        <Frame>
+          <Value>{ player.name }</Value>
+          <Label>Total Health: <Value>{'' + player.health}</Value></Label>
+          <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
+          <Label>Defense: <Value>{'' + player.defense}</Value></Label>
+          {
+            player.currency.map(currency => {
+              return (
+              <Label>{`${currency.name}: `}<Value>{currency.amount}</Value></Label>
+              )
+            })
+          }
+        </Frame>
+      </FlexRow>
+      <FlexRow>
+        {
+          player.armor.map(armor => {
+            return (
+              <Frame>
+                <Label>Armor: <Value>{armor.name}</Value></Label>
+                <Label>Defense: <Value>{`+${armor.defense}`}</Value></Label>
+              </Frame>
+            )
+          })
+        }
+        {
+          player.weapons.map((weapon, idx) => {
+            const inUse = player.currentWeapon === idx
+            return (
+              <Frame>
+                <div>
+                  <Value>{weapon.name}</Value>
+                  <Label>Damage: <Value>{weapon.damage}</Value></Label>
+                  <Label>Speed: <Value>{weapon.speed}</Value></Label>
+                </div>
+                {
+                  inUse
+                    ? <HighlightLabel>Equipped</HighlightLabel>
+                    : <Button color="blue" onClick={() => equip(idx, gameState)}>EQUIP</Button>
+                }
+              </Frame>
+            )
+          })
+        }
+      </FlexRow>
+    </FlexColumn>
     </Panel>
   )
 
