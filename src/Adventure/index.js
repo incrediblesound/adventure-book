@@ -249,7 +249,7 @@ class App extends Component {
         </div>)
     } else {
       return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', maxWidth: '500px' }}>
           <StoryText>{ currentText }</StoryText>
           <FlexRow>{ this.renderRewards() }</FlexRow>
           { this.renderOptions(options) }

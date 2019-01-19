@@ -153,6 +153,7 @@ export const FlexRow = styled.div`
   flex-direction: row;
   height: ${ props => props.height || 'auto'};
   width: ${ props => props.width || 'auto'};
+  flex-wrap: ${ props => props.wrap ? 'wrap' : 'nowrap'};
 `
 export const FlexColumn = styled.div`
   display: flex;

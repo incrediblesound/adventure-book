@@ -57,7 +57,7 @@ const Player = ({ player, gameState }) => (
     <Panel spaceBottom>
     <FlexColumn>
       <FlexRow>
-        <Frame>
+        <FlexColumn>
           <Value>{ player.name }</Value>
           <Label>Total Health: <Value>{'' + player.health}</Value></Label>
           <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
@@ -69,9 +69,9 @@ const Player = ({ player, gameState }) => (
               )
             })
           }
-        </Frame>
+        </FlexColumn>
       </FlexRow>
-      <FlexRow>
+      <FlexRow wrap>
         {
           player.armor.map(armor => {
             return (
