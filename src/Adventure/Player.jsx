@@ -1,5 +1,15 @@
 import React from 'react'
-import { Panel, Label, Value, HighlightLabel, Button, colors, FlexRow, FlexColumn } from '../components/index.jsx'
+import { 
+  Panel,
+  Label,
+  Value,
+  HighlightLabel,
+  Button,
+  colors,
+  FlexRow,
+  FlexColumn,
+  health,
+} from '../components/index.jsx'
 import styled from 'styled-components'
 
 const Frame = styled.div`
@@ -31,7 +41,7 @@ const equip = (idx, gameState) => {
 }
 
 export const PlayerItems = ({ player, gameState }) => (
-  <Panel>
+  <Panel wrap>
     {
       player.items.map(item => {
         if(item.type === 'health'){
@@ -60,7 +70,7 @@ const Player = ({ player, gameState }) => (
         <FlexColumn>
           <Value>{ player.name }</Value>
           <Label>Total Health: <Value>{'' + player.health}</Value></Label>
-          <Label>Current Health: <Value>{'' + player.currentHealth}</Value></Label>
+          <Label>Current Health: { health(player.currentHealth, player.health)}</Label>
           <Label>Defense: <Value>{'' + player.defense}</Value></Label>
           {
             player.currency.map(currency => {

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import React from 'react'
 
 export const colors = {
   'light-green': '#90EE90',
@@ -30,6 +31,19 @@ export const TextLink = styled.span`
     color: #7FDBFF;
   }
 `
+
+export const health = (value, total) => {
+  let color
+  let percent = Math.floor((value / total) * 100)
+  if(percent > 50){
+     color = 'green'
+   } else if(percent > 25){
+     color = '#DAA520'
+   } else {
+     color = '#B22222'
+   }
+  return <Value style={{ color }}>{ value }</Value>
+}
 
 export const Panel = styled.div`
   position: relative;

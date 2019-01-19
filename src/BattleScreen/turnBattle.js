@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Label, Value, Button, FlexColumn, FlexRow, Panel} from '../components/index.jsx'
+import { Label, Value, Button, FlexColumn, FlexRow, health} from '../components/index.jsx'
 import styled from 'styled-components'
 import Target from './Target.jsx'
 import { challengeStrike, playerStrike } from './combat.js'
@@ -41,19 +41,6 @@ const Log = styled.pre`
   height: 95%;
   white-space: pre-wrap;
 `
-
-const health = (value, total) => {
-  let color
-  let percent = Math.floor((value / total) * 100)
-  if(percent > 50){
-     color = 'green'
-   } else if(percent > 25){
-     color = '#DAA520'
-   } else {
-     color = '#B22222'
-   }
-  return <Value style={{ color }}>{ value }</Value>
-}
 
 const Player = ({ player, playerStrike }) => (
   <ClearPanel>

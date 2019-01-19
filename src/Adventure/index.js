@@ -29,7 +29,7 @@ const PlayerInfo = styled.div`
   width: auto;
   margin: 0px 15px;
   padding: 10px;
-  flex-direction: ${ props => props.direction || 'row' }
+  flex-direction: column;
 `
 
 const Choice = styled.div`
