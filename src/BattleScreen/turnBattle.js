@@ -26,11 +26,10 @@ const ClearPanel = styled.div`
 `
 
 const BattlePanel = styled.div`
-  margin: 0px 0px 0px 10px;
-  width: 50%;
+  margin: 2px 0px 0px 10px;
   padding: 7px;
   height: auto;
-  border: 3px solid #ccc;
+  border: none;
 `
 
 const Log = styled.pre`
@@ -38,28 +37,28 @@ const Log = styled.pre`
   border-radius: 5px;
   margin: 0px;
   background-color: #fcfcfc;
-  padding: 3px;
+  padding: 3px 5px;
   height: 95%;
-  width: 50%;
   white-space: pre-wrap;
 `
 
-const Health = ({ value }) => {
+const health = (value, total) => {
   let color
-  if(value > 50){
+  let percent = Math.floor((value / total) * 100)
+  if(percent > 50){
      color = 'green'
-   } else if(value > 25){
-     color = 'yellow'
+   } else if(percent > 25){
+     color = '#DAA520'
    } else {
-     color = 'red'
+     color = '#B22222'
    }
-  return <div style={{ width: value + '%', height: '20px', backgroundColor: color }} />
+  return <Value style={{ color }}>{ value }</Value>
 }
 
 const Player = ({ player, playerStrike }) => (
   <ClearPanel>
     <div><Label size="large">{player.name}</Label></div>
-    <div><Label>Life: <Value>{player.currentHealth}</Value></Label></div>
+    <div><Label>Life: { health(player.currentHealth, player.health)}</Label></div>
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Damage: <Value>{player.weapons[player.currentWeapon].damage}</Value></Label>
     {
@@ -78,7 +77,7 @@ const Player = ({ player, playerStrike }) => (
 const Challenge = ({ challenge }) => (
   <ClearPanel>
     <div><Label size="large">{challenge.name}</Label></div>
-    <div><Label>Life: <Value>{challenge.currentHealth}</Value></Label></div>
+    <div><Label>Life: { health(challenge.currentHealth, challenge.health)}</Label></div>
     <Label>Defense: <Value>{challenge.defense}</Value></Label>
     <Label>Weapon: <Value>{challenge.weapon.name}</Value></Label>
     <Label>Damage: <Value>{challenge.weapon.damage}</Value></Label>
@@ -223,16 +222,16 @@ export default class BattleScreen extends Component {
           <FlexRow height='50%'>
             <Challenge challenge={challenge} />
             <BattlePanel>
-            <FlexColumn>
-              <Label margin="3px 0px">{player.name} Attack bonus: <Value>{playerAttackNumber}</Value></Label>
-              <Label margin="3px 0px">{challenge.name} Attack bonus: <Value>{challengeAttackNumber}</Value></Label>
-              <Label margin="3px 0px 10px 0px">Initiative: <Value>{speed} {time}</Value></Label>
-              {
-                isPlayersTurn
-                ? <Button color="green" disabled={!isPlayersTurn} onClick={this.playerStrike}>Strike</Button>
-                : <p>{challenge.name} is attacking...</p>
-              }
-            </FlexColumn>
+              <FlexColumn>
+                <Label margin="3px 0px">{player.name} Attack bonus: <Value>{playerAttackNumber}</Value></Label>
+                <Label margin="3px 0px">{challenge.name} Attack bonus: <Value>{challengeAttackNumber}</Value></Label>
+                <Label margin="3px 0px 10px 0px">Initiative: <Value>{speed} {time}</Value></Label>
+                {
+                  isPlayersTurn
+                  ? <Button color="green" disabled={!isPlayersTurn} onClick={this.playerStrike}>Strike</Button>
+                  : <p>{challenge.name} is attacking...</p>
+                }
+              </FlexColumn>
             </BattlePanel>
           </FlexRow>
         </FlexColumn>

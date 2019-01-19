@@ -41,9 +41,10 @@ export const Panel = styled.div`
   ${ props => props.spaceLeft ? 'margin-left: 10px;' : '' }
   ${ props => props.spaceBottom ? 'margin-bottom: 10px;' : '' }
   ${ props => props.spaceRight ? 'margin-right: 10px;' : '' }
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 3px;
   padding: 10px;
+  box-shadow: 0px 1px 5px 0px #ccc;
   flex-direction: ${ props => props.direction || 'row' }
 `
 
