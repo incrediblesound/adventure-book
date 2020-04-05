@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import parser from 'story-parser'
 import styled from 'styled-components'
-import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
+import { Title, Story, Button, InlineHeader, Label } from '../components/index.jsx'
 import { categories } from '../Create/constants.js'
-import * as templates from '../Create/templates'
+import { templates, prompts } from '../Create/templates'
 import validate, { getLastPage} from '../Create/validateStory'
 import { Panels, TemplatePanel } from '../Create/index.jsx'
 import { Example } from '../Examples/index.jsx'
@@ -68,14 +68,8 @@ export default class Create extends Component {
     const { text, title, category, description, id } = this.state
     let content = text
     const parserResult = parser(this.state.text)
-    const storyError = parserResult.result && validate(result)
-    if (parserResult.error || storyError) {
-      if (parserResult.error) {
-        let first = text.substring(0, content.length - parserResult.text.length)
-        let second = text.substring(content.length - parserResult.text.length)
-        content = first + '>---{{ ERROR }}---->' + second
-      }
-      this.setState({ error: parserResult.error || storyError, text: content })
+    if (parserResult.error) {
+      this.setState({ error: parserResult.error })
     } else if (!title) {
       this.setState({ error: 'You are required to provide a title for your adventure.' })
     } else if (!category) {
@@ -100,16 +94,16 @@ export default class Create extends Component {
         text: `${this.state.text}${template(0)}`
       })
     } else {
-      const { result, error } = parser(this.state.text)
-      if(error){
+      const game = parser(this.state.text)
+      if(game.error){
         this.setState({ error })
-      } else if (!result.pages.length) {
+      } else if (!game.pages.length) {
         const template = templates[type]
         this.setState({
           text: `${this.state.text}${template(0)}`
         })
       } else {
-        const numPages = getLastPage(result)
+        const numPages = getLastPage(game)
         const template = templates[type]
         this.setState({
           text: `${this.state.text}${template(numPages+1)}`
@@ -161,10 +155,10 @@ export default class Create extends Component {
         </div>
         <TemplatePanel>
           {
-            Object.keys(templates).map(key => {
-              let template = templates[key]
+            templates.map((template, idx) => {
               return (
                 <Example>
+                  <Label>{prompts[idx]}</Label>
                   <pre>{ template(1) }</pre>
                 </Example>
               )

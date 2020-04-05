@@ -3,7 +3,7 @@ import parser from 'story-parser'
 import styled from 'styled-components'
 import BattleScreen from '../BattleScreen/turnBattle.js'
 import { Weapon, Armor, Item, Recovery, HealthItem, Currency } from './items.jsx'
-import { Panel, Button, colors, FlexRow, ErrorText } from '../components/index.jsx'
+import { Panel, Button, colors, FlexRow, ErrorText, Value, Label } from '../components/index.jsx'
 import Player, { PlayerItems } from './Player.jsx'
 import { rndDown } from '../utilities.js'
 
@@ -119,6 +119,13 @@ class App extends Component {
     const { session } = this.props
     const { game } = this.state
     const section = game.pages.filter(section => section.id === selectedOption)[0]
+    // check if any page discovery goals are met
+    const pageGoal = game.goals
+      .filter(goal => goal.method === 'PAGE')
+      .filter(goal => parseInt(goal.condition) === section.id)[0]
+    if (pageGoal){
+      this.state.player.completedGoals[pageGoal.index] = true;
+    }
     session.gameState.updateSection(selectedOption)
     this.setState({
       currentSection: section,
@@ -143,6 +150,14 @@ class App extends Component {
     })
   }
   playerWin = () => {
+    const { currentSection, player, game } = this.state
+    const challenge = currentSection.challenges[0]
+    const challengeGoal = game.goals
+      .filter(goal => goal.method === 'DEFEAT')
+      .filter(goal => goal.condition === challenge.name)[0]
+    if (challengeGoal) {
+      player.completedGoals[challengeGoal.index] = true
+    }
     this.state.sectionMeta.challengePassed = true
     this.props.session.update()
   }
@@ -182,11 +197,6 @@ class App extends Component {
     const rewards = recovery.concat(keys.map(key => {
       const reward = sectionMeta.rewards[key]
       if (reward.obtained) return <noscript />
-      // if (reward.type === 'drop') {
-      //   const possibleRewards = game.drops[reward.name]
-      //   const randomReward = possibleRewards[ rndDown(possibleRewards.length) ]
-      //   return rewardComponent(randomReward, gameState, key)
-      // }
       return rewardComponent(reward, gameState, key)
     }))
     
@@ -270,6 +280,22 @@ class App extends Component {
         <PlayerInfo>
           { player.health && <Player player={player} gameState={this.props.session.gameState} /> }
           { showItems ? <PlayerItems player={player} gameState={this.props.session.gameState} /> : <noscript /> }
+          {
+            <Panel direction="column">
+              <Value>Story Goals</Value>
+              { 
+                game.goals.map(goal => {
+                  const completed = player.completedGoals[goal.index];
+                  return (
+                    <Label>
+                      { completed && "✅ " }
+                      {goal.name}
+                    </Label>
+                   )
+                })
+              }
+            </Panel>
+          }
         </PlayerInfo>
       </MainPanels>
     );

@@ -39,7 +39,9 @@ const Health = ({ value }) => {
 
 const Player = ({ player, coolDown, playerStrike }) => (
   <BattlePanel>
-    <div><Label size="large" >Life: <Value>{Math.floor((player.currentHealth/player.health)*100)}%</Value></Label></div>
+    <div>
+      <Label size="large" >Life: <Value>{Math.floor((player.currentHealth/player.health)*100)}%</Value></Label>
+    </div>
     <Label>Weapon: <Value>{player.weapons[player.currentWeapon].name}</Value></Label>
     <Label>Armor: <Value>{player.armor}</Value></Label>
     <div style={{ width: coolDown + '%', height: '5px', backgroundColor: coolDown === 100 ? 'green' : 'yellow' }}/>

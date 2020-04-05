@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Adventure from '../Adventure/'
+import Adventure from '../Adventure/index.jsx'
 import styled from 'styled-components'
 import { InlineHeader } from '../components/index.jsx'
 

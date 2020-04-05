@@ -5,12 +5,20 @@ interface Currency {
   amount: number;
 }
 
+interface Goal {
+  name: string;
+  index: number;
+  method: string;
+  condition: string;
+}
+
 class GameState {
   id: string;
   player: any;
   sectionMeta: any;
   currentSection: any;
   session: any;
+  game: any;
   constructor(gameData: any, game: any, session: any){
     this.id = `${gameData.author}/${gameData.title}`
 
@@ -21,6 +29,8 @@ class GameState {
       this.player.currentHealth = game.player.health
       this.player.currentWeapon = 0
       this.player.currency = this.player.currency || []
+      this.player.completedGoals = {}
+
     } else {
       this.player = {
         items: [],
@@ -28,6 +38,7 @@ class GameState {
         currency: []
       }
     }
+    this.game = game
     this.sectionMeta = {}
     this.currentSection = 0
     this.session = session
@@ -47,6 +58,12 @@ class GameState {
       playerMoney.amount -= reward.cost.amount
     }
     reward.obtained = true
+    const rewardGoal = this.game.goals
+      .filter((goal: Goal) => goal.method === 'ITEM')
+      .filter((goal: Goal) => goal.condition === reward.name)[0]
+    if (rewardGoal) {
+      this.player.completedGoals[rewardGoal.index] = true
+    }
     switch(reward.type) {
       case 'weapon':
         this.player.weapons.push(reward)
@@ -64,7 +81,8 @@ class GameState {
             currency.amount += reward.amount
           }
         })
-      }
+    }
+
     this.session.update()
   }
   takeHiddenItem(key: string){

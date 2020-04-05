@@ -9,7 +9,7 @@ import {
   items,
   story,
   drop,
-} from './patterns.js'
+} from './patterns.jsx'
 import Stories from './stories.js'
 
 export const Example = styled.div`
@@ -20,11 +20,12 @@ export const Example = styled.div`
   pre {
     white-space: pre-wrap;
   }
-`
+`;
+
 export const Expl = styled.p`
   font-weight: 100;
   line-height: 1.5;
-`
+`;
 
 const exampleMap = {
   examples: Stories,

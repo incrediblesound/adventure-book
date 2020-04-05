@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import parser from 'story-parser'
 import styled from 'styled-components'
-import { Title, Story, Button, InlineHeader } from '../components/index.jsx'
+import { Title, Story, Button, InlineHeader, Label } from '../components/index.jsx'
 import { categories } from './constants.js'
-import * as templates from './templates'
+import { templates, prompts } from './templates'
 import validate, { getLastPage} from './validateStory'
 import { Example } from '../Examples/index.jsx'
 
@@ -77,20 +77,15 @@ export default class Create extends Component {
   submit = () => {
     const { text, title, category, description } = this.state
     let content = text
-    // const parserResult = parser(this.state.text)
-    // const storyError = parserResult.result && validate(result)
-    // if (parserResult.error || storyError) {
-    //   if (parserResult.error) {
-    //     let first = text.substring(0, content.length - parserResult.text.length)
-    //     let second = text.substring(content.length - parserResult.text.length)
-    //     content = first + '>---{{ ERROR }}---->' + second
-    //   }
-    //   this.setState({ error: error || storyError, text: content })
-    // } else if (!title) {
-    //   this.setState({ error: 'You are required to provide a title for your adventure.' })
-    // } else if (!category) {
-    //   this.setState({ error: 'You must chose a category for your adventure.'})
-    // } else {
+    const parserResult = parser(this.state.text)
+    const storyError = parserResult.result && validate(result)
+    if (parserResult.error) {
+      this.setState({ error: parserError.error })
+    } else if (!title) {
+      this.setState({ error: 'You are required to provide a title for your adventure.' })
+    } else if (!category) {
+      this.setState({ error: 'You must chose a category for your adventure.'})
+    } else {
     this.props.session.saveStory({ content, title, category, description })
       .then(response => {
         const { data } = response
@@ -101,7 +96,7 @@ export default class Create extends Component {
           this.props.navigate('profile')
         }
       })
-    // }
+    }
   }
   renderCategories(){
     return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (
@@ -161,10 +156,10 @@ export default class Create extends Component {
         </div>
         <TemplatePanel>
           {
-            Object.keys(templates).map(key => {
-              let template = templates[key]
+            templates.map((template, idx) => {
               return (
                 <Example>
+                  <Label>{prompts[idx]}</Label>
                   <pre>{ template(1) }</pre>
                 </Example>
               )
