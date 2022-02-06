@@ -34,7 +34,7 @@
     "webpack-dev-server": "^2.6.0"
   },
   "dependencies": {
-    "axios": "^0.16.2",
+    "axios": "^0.21.2",
     "bcrypt": "3.0.6",
     "body-parser": "^1.17.2",
     "express": "^4.16.2",
