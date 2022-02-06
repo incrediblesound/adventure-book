@@ -53,7 +53,7 @@ export default class Create extends Component {
     })
   }
   renderCategories(){
-    return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (
+    return [<h2 className="inline-header">Category:</h2>].concat(categories.map(category => (
       <Button
         spaceLeft
         active={ this.state.category === category }

@@ -5,8 +5,7 @@ const SALT_FACTOR = 10
 
 const { categories } = require('../src/Create/constants.js')
 
-
-mongoose.connect(process.env.MONGOHQ_URL || 'mongodb://localhost/stories')
+mongoose.connect(process.env.MONGOHQ_URL)
 
 const storySchema = mongoose.Schema({
     title: { type: String, reqired: true },

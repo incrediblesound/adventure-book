@@ -5,7 +5,7 @@ module.exports = app => {
   app.post('/api/login', (req, res) => {
     const { username, password } = req.body
 
-    User.findOne({ username }).then(user => {
+    User.findOne({ username }).exec().then(user => {
       const userExists = user !== null
       const clientUser =  userExists && { username: user.username, id: user._id }
       if (userExists) {
@@ -25,7 +25,9 @@ module.exports = app => {
 
   app.post('/api/signup', (req, res) => {
     const { username, password, email } = req.body
-    User.findOne({ username }).then(result => {
+    console.log(req.body)
+    User.findOne({ username }).exec().then(result => {
+      console.log(result)
       if(result !== null){
         res.send({ success: false, reason: 'user already exists' })
       } else {

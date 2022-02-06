@@ -16,7 +16,7 @@ const ItemPanel = styled.div`
 
 export const Recovery = ({ handleClick }) => (
   <ItemPanel>
-    <InlineHeader>Recover Health</InlineHeader>
+    <h2 className="inline-header">Recover Health</h2>
     <Button spaceTop color="green" onClick={handleClick}>Heal</Button>
   </ItemPanel>
 )
@@ -27,7 +27,7 @@ export const Armor = ({ reward, handleTake, canAfford }) => {
     : 'Take'
   return (
     <ItemPanel>
-    <InlineHeader>{reward.name}</InlineHeader>
+    <h2 className="inline-header">{reward.name}</h2>
     <Value>{` Defense: ${reward.defense} `}</Value>
     { reward.cost 
       ? <Value>{` Cost: ${reward.cost.name} ${reward.cost.amount} `}</Value>
@@ -44,7 +44,7 @@ export const Weapon = ({ reward, handleTake, canAfford }) => {
     : 'Take'
   return (
     <ItemPanel>
-    <InlineHeader>{reward.name}</InlineHeader>
+    <h2 className="inline-header">{reward.name}</h2>
     <Value>{` Damage: ${reward.damage} `}</Value>
     <Value>{` Speed: ${reward.speed} `}</Value>
     { reward.cost 
@@ -62,7 +62,7 @@ export const Item = ({ reward, handleTake, canAfford }) => {
     : 'Take'
   return (
     <ItemPanel>
-    <InlineHeader>{reward.name}</InlineHeader>
+    <h2 className="inline-header">{reward.name}</h2>
     <Button disabled={!canAfford} spaceTop color="blue" onClick={() => handleTake(reward)}>{ verb }</Button>
     </ItemPanel>
   )
@@ -74,7 +74,7 @@ export const HealthItem = ({ reward, handleTake, canAfford }) => {
     : 'Take'
   return (
     <ItemPanel>
-    <InlineHeader>{`${reward.name} (Health +${reward.recovery})`}</InlineHeader>
+    <h2 className="inline-header">{`${reward.name} (Health +${reward.recovery})`}</h2>
     { reward.cost 
       ? <Value>{` Cost: ${reward.cost.name} ${reward.cost.amount} `}</Value>
       : null
@@ -87,7 +87,7 @@ export const HealthItem = ({ reward, handleTake, canAfford }) => {
 export const Currency = ({ reward, handleTake }) => {
   return (
     <ItemPanel>
-    <InlineHeader>{`${reward.name}: ${reward.amount}`}</InlineHeader>
+    <h2 className="inline-header">{`${reward.name}: ${reward.amount}`}</h2>
     <Button spaceTop color="yellow" onClick={() => handleTake(reward)}>Take</Button>
     </ItemPanel>
   )

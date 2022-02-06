@@ -288,7 +288,7 @@ class App extends Component {
                   const completed = player.completedGoals[goal.index];
                   return (
                     <Label>
-                      { completed && "✅ " }
+                      { completed ? "✅ " : "[ ] " }
                       {goal.name}
                     </Label>
                    )

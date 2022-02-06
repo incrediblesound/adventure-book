@@ -36,8 +36,8 @@ class Story extends Component {
     const { author, title } = this.state.gameData
 
     return (
-      <div>
-        <InlineHeader size="medium">{title}</InlineHeader>
+      <div className="story-container">
+        <h2 className="inline-header">{title}</h2>
         <span style={{ fontSize: '12px', fontWeight: '700' }}>{` by ${author}`}</span>
         <Adventure
           session={session}

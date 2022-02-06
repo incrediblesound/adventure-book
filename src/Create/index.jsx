@@ -16,7 +16,6 @@ export const TemplatePanel = styled.div`
   margin-left: 30px;
   margin-top: 10px;
   padding: 5px;
-  height: 500px;
   overflow-x: scroll;
 `
 
@@ -99,7 +98,7 @@ export default class Create extends Component {
     }
   }
   renderCategories(){
-    return [<InlineHeader>Category:</InlineHeader>].concat(categories.map(category => (
+    return [<h2 className="inline-header">Category:</h2>].concat(categories.map(category => (
       <Button
         spaceLeft
         active={ this.state.category === category }

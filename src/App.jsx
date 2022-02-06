@@ -12,27 +12,6 @@ import EditStory from './Edit/index.jsx'
 import Examples from './Examples/index.jsx'
 import About from './About/index.jsx'
 
-const Backing = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #70e7ff;
-`
-
-const Container = styled.div`
-  background-color: white;
-  overflow-x: scroll;
-  padding: 7px 40px;
-  border-radius: 5px;
-  margin: 0px auto;
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  font-family: 'Lato', sans-serif;
-`
-
 const routes = {
   'home': Browse,
   'login': Login,
@@ -52,17 +31,17 @@ class App extends Component {
     const { session, navigate } = this.props
 
     return (
-      <Backing>
+      <React.Fragment>
         { page !== 'login' && <Header session={session} navigate={navigate} page={page} /> }
-        <Container>
+        <div className="container">
           <Component
             session={session}
             navigate={navigate}
             location={location}
             page={page}
           />
-        </Container>
-      </Backing>
+        </div>
+      </React.Fragment>
     )
   }
 }

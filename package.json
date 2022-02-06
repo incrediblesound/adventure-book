@@ -4,10 +4,11 @@
   "description": "Simple and lightweight Boilerplate for ReactJS projects",
   "scripts": {
     "lint": "eslint src",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "webpack"
   },
   "engines": {
-    "node": "8.1.4"
+    "node": "14.4.0"
   },
   "repository": "https://github.com/noahlotzer/react-simple-boilerplate.git",
   "keywords": [],
@@ -34,15 +35,15 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
-    "bcrypt": "^1.0.3",
+    "bcrypt": "3.0.6",
     "body-parser": "^1.17.2",
     "express": "^4.16.2",
     "express-session": "^1.15.5",
     "loglevel": "^1.4.1",
-    "mongoose": "^4.11.3",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "story-parser": "2.2.6",
+    "mongoose": "6.1.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "story-parser": "2.2.7",
     "styled-components": "^2.1.1"
   },
   "main": "server.js"
